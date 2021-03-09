@@ -6,13 +6,13 @@ const config = {
     type: Phaser.AUTO, // Phaser is global without importing Phaser.
     parent: 'phaser-example',
     width: 800,
-    height: 600,
+    height: 608,
     parent: "container",
     scene: GameScene,
     physics: {
       default: 'arcade',
       arcade: {
-          gravity: { y: 300 },
+          gravity: { y: 600 },
           debug: true
       }
     }
