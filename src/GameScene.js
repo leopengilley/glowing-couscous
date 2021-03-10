@@ -19,8 +19,8 @@ class GameScene extends Scene {
     this.load.image("skyImage", "../assets/bg/sky.png");
     this.load.tilemapTiledJSON("map", "../assets/map/phaserGameMap.json");
 
-    // this.load.image('star', 'assets/star.png');
-    // this.load.image('bomb', 'assets/bomb.png');
+    this.load.image('star', 'assets/star.png');
+    this.load.image('bomb', 'assets/bomb.png');
 
     this.load.spritesheet('dude',
       'assets/char/Sprites/Idle.png',
@@ -45,6 +45,12 @@ class GameScene extends Scene {
     this.load.spritesheet('attack',
       'assets/char/Sprites/Attack1.png',
       { frameWidth: 135, frameHeight: 87 }
+    );
+
+    // enemy
+    this.load.spritesheet('enemy',
+      'assets/enemy/sprites/Idle.png',
+      { frameWidth: 128, frameHeight: 123 }
     );
   }
 
@@ -80,6 +86,7 @@ class GameScene extends Scene {
       backgroundI.setCollisionByProperty({ collides: true });
 
       const camera = this.cameras.main;
+      camera.setBounds(0, 0, backgroundA.widthInPixels, config.height);
 
       // Set up the arrows to control the camera
       this.cursors = this.input.keyboard.createCursorKeys();
@@ -98,8 +105,13 @@ class GameScene extends Scene {
       this.physics.add.collider(this.player, backgroundH);
       this.physics.add.collider(this.player, backgroundI);
 
+      this.createEnemy();
+      this.physics.add.collider(this.enemy, backgroundG);
+      this.physics.add.collider(this.enemy, backgroundD);
+      this.physics.add.collider(this.enemy, backgroundH);
+      this.physics.add.collider(this.enemy, backgroundI);
+
       camera.startFollow(this.player);
-      camera.setBounds(0, 0, backgroundA.widthInPixels, backgroundA.heightInPixels);
 
       // const debugGraphics = this.add.graphics().setAlpha(0.75);
       // backgroundG.renderDebug(debugGraphics, {
@@ -113,24 +125,27 @@ class GameScene extends Scene {
 
       this.createAnimationUpdate();
 
-      // this.createStars();
+      this.createStars();
+      this.physics.add.collider(this.stars, backgroundG);
+      this.physics.add.collider(this.stars, backgroundD);
+      this.physics.add.collider(this.stars, backgroundH);
+      this.physics.add.collider(this.stars, backgroundI);
       // this.createBombs();
 
-      // this.scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
-
-
-
+      this.scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
     }
 
 
     createPlayer() {
       this.player = this.physics.add.sprite(100, 0, 'dude');
       this.player.setBounce(0.2);
+      this.player.setSize(10, 10, true);
+      this.player.setOffset(67, 68)
 
       this.anims.create({
         key: 'idle',
         frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 9 }),
-        frameRate: 10,
+        frameRate: 20,
         repeat: 0
       })
 
@@ -168,23 +183,24 @@ class GameScene extends Scene {
       });
     }
 
+    createEnemy() {
+      this.enemy = this.physics.add.sprite(400, 0, 'enemy');
+      this.enemy.setBounce(0.2);
+      this.enemy.setSize(10, 10, true);
+      this.enemy.setOffset(67, 80);
+
+      this.anims.create({
+        key: 'idleEnemy',
+        frames: this.anims.generateFrameNumbers('enemy', { start: 0, end: 3 }),
+        frameRate: 10,
+        repeat: 0
+      })
+    }
 
     // How do I reference the attack animation in this code?
     createAnimationUpdate() {
       this.player.on('animationupdate', (anim, frame, sprite, frameKey) => {
-        if(anim.key === 'attack1' && frame.index === 0) {
-          console.log("attacking frame 5*");
-          this.physics.world.disable(this.attackZone);
-          this.attackZone.x = this.player.x;
-          this.attackZone.y = this.player.y;
-        }
-        if(anim.key === 'attack1' && frame.index === 1) {
-          console.log("attacking frame 2");
-          this.physics.world.enable(this.attackZone);
-          this.attackZone.x = this.player.x + 50;
-          this.attackZone.y = this.player.y - 20;
-          this.attackZone.body.height = 50;
-        }
+        // it works with 3, 4, 2 frames
         if(anim.key === 'attack1' && frame.index === 3) {
           console.log("attacking frame 3");
           this.physics.world.enable(this.attackZone);
@@ -199,45 +215,40 @@ class GameScene extends Scene {
           this.attackZone.y = this.player.y;
         }
       });
-
-      // this.physics.add.overlap(this.attackZone, this.stars, () => {
-      //   this.collectStar;
-      // });
     }
 
-    // createStars() {
-    //   this.stars = this.physics.add.group({
-    //     key: 'star',
-    //     repeat: 11,
-    //     setXY: { x: 12, y: 0, stepX: 70 } // 70px apart
-    //   });
-    //
-    //   this.stars.children.iterate((child) => {
-    //     child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
-    //   });
-    //
-    //   this.physics.add.collider(this.stars, this.seaTiled);
-    //   // this.physics.add.overlap(this.player, this.stars, this.collectStar, null, this);
-    // }
+    createStars() {
+      this.stars = this.physics.add.group({
+        key: 'star',
+        repeat: 11,
+        setXY: { x: 12, y: 0, stepX: 70 } // 70px apart
+      });
 
-    // collectStar(player, star) {
-    //   star.disableBody(true, true);
-    //   this.score += 10;
-    //   this.scoreText.setText('Score: ' + this.score);
-    //
-    //   if (this.stars.countActive(true) === 0) {
-    //     this.stars.children.iterate((child) => {
-    //       child.enableBody(true, child.x, 0, true, true);
-    //     });
-    //
-    //     // uses the players position for bomb location: this is cool!!!
-    //     const x = (this.player.x < 400) ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400);
-    //     const bomb = this.bombs.create(x, 16, 'bomb');
-    //     bomb.setBounce(1);
-    //     bomb.setCollideWorldBounds(true);
-    //     bomb.setVelocity(Phaser.Math.Between(-200, 200), 20); // random bomb direction bounce
-    //   }
-    // }
+      this.stars.children.iterate((child) => {
+        child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
+      });
+
+      this.physics.add.overlap(this.attackZone, this.stars, this.collectStar, null, this);
+    }
+
+    collectStar(player, star) {
+      star.disableBody(true, true);
+      this.score += 10;
+      this.scoreText.setText('Score: ' + this.score);
+
+      // if (this.stars.countActive(true) === 0) {
+      //   this.stars.children.iterate((child) => {
+      //     child.enableBody(true, child.x, 0, true, true);
+      //   });
+      //
+      //   // uses the players position for bomb location: this is cool!!!
+      //   const x = (this.player.x < 400) ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400);
+      //   const bomb = this.bombs.create(x, 16, 'bomb');
+      //   bomb.setBounce(1);
+      //   bomb.setCollideWorldBounds(true);
+      //   bomb.setVelocity(Phaser.Math.Between(-200, 200), 20); // random bomb direction bounce
+      // }
+    }
 
     // createBombs() {
     //   this.bombs = this.physics.add.group();
@@ -257,6 +268,7 @@ class GameScene extends Scene {
     ////////////////////////////////////////////////////////////////// update
     update(time, delta) {
       this.controls.update(delta);
+      this.enemy.anims.play('idleEnemy', true);
       if (this.gameOver !== true) {
         if (this.cursors.left.isDown) {
           this.player.setVelocityX(-160);
