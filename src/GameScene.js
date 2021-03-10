@@ -61,6 +61,7 @@ class GameScene extends Scene {
 
     create() {
       // this.createMap();
+      this.physics.world.setBounds(0, 0, 2288, 608)
       const map = this.make.tilemap({ key: "map"});
 
       const tileset = map.addTilesetImage("tileset", "tiles", 16, 16);
@@ -153,7 +154,7 @@ class GameScene extends Scene {
       this.player.body.onWorldBounds=true;
 
       this.physics.world.on('worldbounds', (body, up, down, left, right) => {//if the body collided at the bottom, execute gameover
-        if(down || left || right || up) {
+        if(down, up , left, right) {
           this.gameOverText.visible = true;
           this.player.anims.play('dead', true);
           this.gameOver = true;
