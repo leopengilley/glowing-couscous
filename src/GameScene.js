@@ -255,12 +255,12 @@ class GameScene extends Scene {
         yoyo: true
       })
 
-      this.anims.create({
-        key: 'shardAnimBreak',
-        frames: this.anims.generateFrameNumbers('shardSheet', { start: 9, end: 0 }),
-        frameRate: 10,
-        repeat: 0
-      });
+      // this.anims.create({
+      //   key: 'shardAnimBreak',
+      //   frames: this.anims.generateFrameNumbers('shardSheet', { start: 9, end: 0 }),
+      //   frameRate: 10,
+      //   repeat: 0
+      // });
 
       // this.shard.children.iterate((child) => {
       //   child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
@@ -323,7 +323,7 @@ class GameScene extends Scene {
           this.player.setVelocityX(0);
           this.player.anims.play('idle', true);
         }
-        if (this.cursors.up.isDown) { 
+        if (this.cursors.up.isDown) {
           this.player.setVelocityY(-180);
           this.player.anims.play('up', true);
         }
