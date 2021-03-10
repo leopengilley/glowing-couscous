@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import GameScene from './GameScene';
+import PreloadScreen from './PreloadScreen';
 // ./ for same folder, and no .js
 
 const config = {
@@ -8,7 +9,7 @@ const config = {
     width: 800,
     height: 608,
     parent: "container",
-    scene: GameScene,
+    scene: [PreloadScreen, GameScene],
     physics: {
       default: 'arcade',
       arcade: {

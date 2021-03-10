@@ -4,7 +4,7 @@ import { config } from './config';
 class GameScene extends Scene {
 
   constructor() {
-    super();
+    super('game');
 
     this.score = 0;
     this.gameOver = false;
@@ -133,6 +133,9 @@ class GameScene extends Scene {
       // this.createBombs();
 
       this.scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
+
+      this.gameOverText = this.add.text(215, 300, 'Game Over Click to play again', {fontSize: '42px', fill: 'red'}).setOrigin(.25);
+      this.gameOverText.visible = false;
     }
 
 
@@ -140,7 +143,19 @@ class GameScene extends Scene {
       this.player = this.physics.add.sprite(100, 0, 'dude');
       this.player.setBounce(0.2);
       this.player.setSize(10, 10, true);
-      this.player.setOffset(67, 68)
+      this.player.setOffset(67, 68);
+      this.player.setCollideWorldBounds(true);
+      this.player.body.onWorldBounds=true;
+
+      this.physics.world.on('worldbounds', (body, up, down, left, right) => {//if the body collided at the bottom, execute gameover
+        if(down) {
+
+          this.gameOver = true;
+          this.input.on('pointerdown', () => this.scene.start('preload'));
+          this.gameOverText.visible = true;
+          this.player.anims.play('dead', true);
+        };
+      });
 
       this.anims.create({
         key: 'idle',
@@ -172,7 +187,8 @@ class GameScene extends Scene {
       this.anims.create({
           key: 'dead',
           frames: this.anims.generateFrameNumbers('death', { start: 0, end: 8 }),
-          frameRate: 10
+          frameRate: 10,
+          hideOnComplete: true
       });
       this.anims.create({
           key: 'attack1',
@@ -202,14 +218,14 @@ class GameScene extends Scene {
       this.player.on('animationupdate', (anim, frame, sprite, frameKey) => {
         // it works with 3, 4, 2 frames
         if(anim.key === 'attack1' && frame.index === 3) {
-          console.log("attacking frame 3");
+          // console.log("attacking frame 3");
           this.physics.world.enable(this.attackZone);
           this.attackZone.x = this.player.x + 50;
           this.attackZone.y = this.player.y - 20;
           this.attackZone.body.height = 50;
         }
         if(anim.key === 'attack1' && frame.index === 4) {
-          console.log("attacking frame 4");
+          // console.log("attacking frame 4");
           this.physics.world.disable(this.attackZone);
           this.attackZone.x = this.player.x;
           this.attackZone.y = this.player.y;
