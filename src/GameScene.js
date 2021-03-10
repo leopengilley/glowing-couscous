@@ -52,6 +52,11 @@ class GameScene extends Scene {
       'assets/enemy/sprites/Idle.png',
       { frameWidth: 128, frameHeight: 123 }
     );
+
+    this.load.spritesheet('shardSheet',
+      'assets/CrystaFragments.png',
+      { frameWidth: 200, frameHeight: 256 }
+    );
   }
 
     create() {
@@ -126,10 +131,10 @@ class GameScene extends Scene {
       this.createAnimationUpdate();
 
       this.createStars();
-      this.physics.add.collider(this.stars, backgroundG);
-      this.physics.add.collider(this.stars, backgroundD);
-      this.physics.add.collider(this.stars, backgroundH);
-      this.physics.add.collider(this.stars, backgroundI);
+      this.physics.add.collider(this.shard, backgroundG);
+      this.physics.add.collider(this.shard, backgroundD);
+      this.physics.add.collider(this.shard, backgroundH);
+      this.physics.add.collider(this.shard, backgroundI);
       // this.createBombs();
 
       this.scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
@@ -237,25 +242,40 @@ class GameScene extends Scene {
 
     createStars() {
 
-      this.stars = this.physics.add.group({
-        key: 'star',
-        repeat: 11,
-        setXY: { x: 12, y: 0, stepX: 70 } // 70px apart
+      this.shard = this.physics.add.sprite(600, 0, 'shardSheet');
+      this.shard.setScale(0.3);
+      this.shard.setSize(30, 100, true);
+      this.shard.setOffset(80, 100);
+      //
+      this.anims.create({
+        key: 'shardAnimIdle',
+        frames: this.anims.generateFrameNumbers('shardSheet', { start: 9, end:12 }),
+        frameRate: 5,
+        repeat: 0,
+        yoyo: true
+      })
+
+      this.anims.create({
+        key: 'shardAnimBreak',
+        frames: this.anims.generateFrameNumbers('shardSheet', { start: 9, end: 0 }),
+        frameRate: 10,
+        repeat: 0
       });
 
-      this.stars.children.iterate((child) => {
-        child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
-      });
+      // this.shard.children.iterate((child) => {
+      //   child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
+      // });
 
-      this.physics.add.overlap(this.attackZone, this.stars, this.collectStar, null, this);
+      this.physics.add.overlap(this.attackZone, this.shard, this.collectStar, null, this);
     }
 
     collectStar(player, star) {
-      star.disableBody(true, true);
       this.score += 10;
       this.scoreText.setText('Score: ' + this.score);
+      star.disableBody(true, true);
 
-      // if (this.stars.countActive(true) === 0) {
+
+      // if (this.shard.countActive(true) === 0) {
       //   this.stars.children.iterate((child) => {
       //     child.enableBody(true, child.x, 0, true, true);
       //   });
@@ -288,6 +308,8 @@ class GameScene extends Scene {
     update(time, delta) {
       this.controls.update(delta);
       this.enemy.anims.play('idleEnemy', true);
+      this.shard.anims.play('shardAnimIdle', true);
+
       if (this.gameOver !== true) {
         if (this.cursors.left.isDown) {
           this.player.setVelocityX(-160);
@@ -301,7 +323,7 @@ class GameScene extends Scene {
           this.player.setVelocityX(0);
           this.player.anims.play('idle', true);
         }
-        if (this.cursors.up.isDown) { // && this.player.body.touching.down
+        if (this.cursors.up.isDown) { 
           this.player.setVelocityY(-180);
           this.player.anims.play('up', true);
         }
