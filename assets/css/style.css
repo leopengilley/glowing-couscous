@@ -1,0 +1,11 @@
+body{
+  background-image: url("../background.png");
+  background-size: cover;
+}
+
+canvas {
+  border: 1px solid lightblue;
+  display: flex;
+  margin: auto;
+  margin-top: 50px;
+}

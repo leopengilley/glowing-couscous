@@ -218,6 +218,7 @@ class GameScene extends Scene {
     }
 
     createStars() {
+
       this.stars = this.physics.add.group({
         key: 'star',
         repeat: 11,
