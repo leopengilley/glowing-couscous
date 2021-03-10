@@ -12,12 +12,12 @@ class GameScene extends Scene {
   };
 
   preload() {
-    this.load.image("tiles", "../assets/map/tileset.png");
-    this.load.image("cloudsImage", "../assets/bg/clouds.png");
-    this.load.image("farGroundsImage", "../assets/bg/far-grounds.png");
-    this.load.image("seaImage", "../assets/bg/sea.png");
-    this.load.image("skyImage", "../assets/bg/sky.png");
-    this.load.tilemapTiledJSON("map", "../assets/map/phaserGameMap.json");
+    this.load.image("tiles", "assets/map/tileset.png");
+    this.load.image("cloudsImage", "assets/bg/clouds.png");
+    this.load.image("farGroundsImage", "assets/bg/far-grounds.png");
+    this.load.image("seaImage", "assets/bg/sea.png");
+    this.load.image("skyImage", "assets/bg/sky.png");
+    this.load.tilemapTiledJSON("map", "assets/map/phaserGameMap.json");
 
     this.load.image('star', 'assets/star.png');
     this.load.image('bomb', 'assets/bomb.png');
