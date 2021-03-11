@@ -154,7 +154,7 @@ class GameScene extends Scene {
       this.player.body.onWorldBounds=true;
 
       this.physics.world.on('worldbounds', (body, up, down, left, right) => {//if the body collided at the bottom, execute gameover
-        if(down, up , left, right) {
+        if(down || up || left || right) {
           this.gameOverText.visible = true;
           this.player.anims.play('dead', true);
           this.gameOver = true;
