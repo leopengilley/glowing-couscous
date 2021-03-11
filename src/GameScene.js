@@ -213,6 +213,8 @@ class GameScene extends Scene {
       this.enemy.setSize(10, 10, true);
       this.enemy.setOffset(67, 80);
 
+
+
       this.anims.create({
         key: 'idleEnemy',
         frames: this.anims.generateFrameNumbers('enemy', { start: 0, end: 3 }),
@@ -267,7 +269,7 @@ class GameScene extends Scene {
       //   child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
       // });
 
-      this.physics.add.overlap(this.attackZone, this.shard, this.collectStar, null, this);
+      this.physics.add.overlap(this.attackZone, this.shard, this.collectStar, this.enemy, this.damage null, this);
     }
 
     collectStar(player, star) {
