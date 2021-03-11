@@ -264,6 +264,12 @@ class GameScene extends Scene {
       this.score += 1;
       this.scoreText.setText('Shards: ' + this.score);
       star.disableBody(true, true);
+      this.gameOverText.visible = true;
+      this.gameOver = true;
+      this.input.on('pointerdown', () => {
+        this.scene.start('preload');
+        this.gameOver = false;
+      });
     }
 
 
