@@ -1,10 +1,9 @@
 import Phaser from 'phaser';
 import GameScene from './GameScene';
 import PreloadScreen from './PreloadScreen';
-// ./ for same folder, and no .js
 
 const config = {
-    type: Phaser.AUTO, // Phaser is global without importing Phaser.
+    type: Phaser.AUTO,
     parent: 'phaser-example',
     width: 800,
     height: 608,
@@ -19,6 +18,4 @@ const config = {
     }
 };
 
-// why destructuring? why not default?
-// you could do more objects with the config separated by a comma
 export { config };

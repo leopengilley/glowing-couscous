@@ -1,50 +1,133 @@
-# Phaser 3 Webpack Project Template
+# Cloudy with a chance of monk
 
-A Phaser 3 project template with ES6 support via [Babel 7](https://babeljs.io/) and [Webpack 4](https://webpack.js.org/) that includes hot-reloading for development and production-ready builds.
+Find, break and collect the shard on the map to win the game!
 
-This has been updated for Phaser 3.50.0 version and above.
-
-Loading images via JavaScript module `import` is also supported, although not recommended.
-
-## Requirements
-
-[Node.js](https://nodejs.org) is required to install dependencies and run scripts via `npm`.
-
-## Available Commands
-
-| Command | Description |
+## How to Play
+| Command | Action |
 |---------|-------------|
-| `npm install` | Install project dependencies |
-| `npm start` | Build project and open web server running project |
-| `npm run build` | Builds code bundle with production settings (minification, uglification, etc..) |
+| `space` | Attack |
+| `arrow keys` | Move and jump |
 
-## Writing Code
+## Technologies Used
+I chose Phaser because it is a light and easy to use JavaScript library for making web games.
 
-After cloning the repo, run `npm install` from your project directory. Then, you can start the local development server by running `npm start`.
+* Phaser 3.50.0
+* Tiled
+* Node.js
+* HTML
+* CSS
 
-After starting the development server with `npm start`, you can edit any files in the `src` folder and webpack will automatically recompile and reload your server (available at `http://localhost:8080` by default).
+![PreLoading Screen](assets/preloadMd.png)
 
-## Customizing the Template
+![Action Shot](assets/actionShotMd.gif)
 
-### Babel
 
-You can write modern ES6+ JavaScript and Babel will transpile it to a version of JavaScript that you want your project to support. The targeted browsers are set in the `.babelrc` file and the default currently targets all browsers with total usage over "0.25%" but excludes IE11 and Opera Mini.
+## Challenges
 
- ```
-"browsers": [
-  ">0.25%",
-  "not ie 11",
-  "not op_mini all"
-]
- ```
+* The Monk's attack
+  * The attack is broken down into 2 parts:
+    * The scope of the animation
+      * Phaser's event called "ANIMATION_UPDATE" allows you to reference an animation within a function.
 
-### Webpack
+```js
+createAnimationUpdate() {
+  this.player.on('animationupdate', (anim, frame, sprite, frameKey) => {
+    if(anim.key === 'attack1' && frame.index === 3) {
+      // console.log("attack enabled on frame 3");
+      this.physics.world.enable(this.attackZone);
+      this.attackZone.x = this.player.x + 50;
+      this.attackZone.y = this.player.y - 20;
+      this.attackZone.body.height = 50;
+    }
+    if(anim.key === 'attack1' && frame.index === 4) {
+      // console.log("attack disabling on frame 4");
+      this.physics.world.disable(this.attackZone);
+      this.attackZone.x = this.player.x;
+      this.attackZone.y = this.player.y;
+    }
+  });
+}
+```
 
-If you want to customize your build, such as adding a new webpack loader or plugin (i.e. for loading CSS or fonts), you can modify the `webpack/base.js` file for cross-project changes, or you can modify and/or create new configuration files and target them in specific npm tasks inside of `package.json'.
+In this function I used the reference to an animation `anim` and a certain frame `frame`.
 
-## Deploying Code
+But a whole animation is the size of the whole player. To break it down and make sure that only the monk's wooden stick hit the shard I had to add a Phaser physics object. This is an invisible square, sized and positioned to match the movement of the monk's wooden pole.
 
-After you run the `npm run build` command, your code will be built into a single bundle located at `dist/bundle.min.js` along with any other assets you project depended. 
+```js
+this.physics.world.enable(this.attackZone);
+this.attackZone.x = this.player.x + 50;
+this.attackZone.y = this.player.y - 20;
+this.attackZone.body.height = 50;
+```
 
-If you put the contents of the `dist` folder in a publicly-accessible location (say something like `http://mycoolserver.com`), you should be able to open `http://mycoolserver.com/index.html` and play your game.
-# glowing-couscous
+![Example of physics object](assets/physicsExampleMd.gif)
+
+Creating an a physics object:
+```js
+this.attackZone = this.add.zone(this.player.x, this.player.y, 40, 40);
+```
+
+
+* Creating a map that scrolls with the player
+  * I learnt how to use a program called Tiled. Tiled takes images or a sheet of images and lets you create a game map. The map is exported as a json file where each layer, tile, and custom property were used in this project. You can view these in assets/map.
+  * The features I used in Tiled were
+      * Tilesets (images)
+      * Layers (a collection of images)
+      * Custom Properties (to ensure certain tiles/images were interactive with the player)
+
+  ![Example of physics object](assets/tiled.png)
+
+Create a variable which will be used to make a tilemap of the images:
+
+```js
+const map = this.make.tilemap({ key: "map"});
+```
+
+Making the tile map of the different images used in the project:
+
+```js
+const tileset = map.addTilesetImage("tileset", "tiles", 16, 16);
+const cloudTile = map.addTilesetImage("clouds", "cloudsImage", 16, 16);
+const farGroundsTile = map.addTilesetImage("far-grounds", "farGroundsImage", 16, 16);
+const seaTile = map.addTilesetImage("sea", "seaImage", 16, 16);
+const skyTile = map.addTilesetImage("sky", "skyImage", 16, 16);
+```
+
+Creating the layers that exist in the game map's json file with the images:
+
+```js
+const backgroundA = map.createLayer("background1", [seaTile, skyTile]);
+const backgroundB = map.createLayer("background2", cloudTile);
+const backgroundC = map.createLayer("background3", farGroundsTile);
+const backgroundD = map.createLayer("background4", tileset);
+const backgroundE = map.createLayer("background5", tileset);
+const backgroundF = map.createLayer("background6", tileset);
+const backgroundG = map.createLayer("background7", tileset);
+const backgroundH = map.createLayer("background8", tileset);
+const backgroundI = map.createLayer("background9", tileset);
+```
+
+Setting a collision between the player and the platform layers:
+* the numbers are the tile indexes
+* not sure why I have `setCollisionBetween()` and `setCollidesByProperty()`??
+
+```js
+backgroundG.setCollisionBetween(0, 475, true, 'backgroundG');
+backgroundD.setCollisionBetween(0, 475, true, 'backgroundD');
+backgroundH.setCollisionBetween(0, 475, true, 'backgroundH');
+backgroundI.setCollisionBetween(0, 475, true, 'backgroundI');
+backgroundG.setCollisionByProperty({ collides: true });
+backgroundD.setCollisionByProperty({ collides: true });
+backgroundH.setCollisionByProperty({ collides: true });
+backgroundI.setCollisionByProperty({ collides: true });
+```
+
+## Bugs
+* If you keep the spacebar pressed down, the player will keep moving upwards.
+* There is no way to win the game at the moment.
+
+## Future Plan
+* My future plan is to create a story lined game where the player must defeat a few enemies before a larger final one. A health system and a power up system, so when the player collects a shard his attack or health increases.
+* To clean up the code and create separate files for each game component.
+
+## Links

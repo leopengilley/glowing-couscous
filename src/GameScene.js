@@ -19,9 +19,6 @@ class GameScene extends Scene {
     this.load.image("skyImage", "assets/bg/sky.png");
     this.load.tilemapTiledJSON("map", "assets/map/phaserGameMap.json");
 
-    // this.load.image('star', 'assets/star.png');
-    // this.load.image('bomb', 'assets/bomb.png');
-
     this.load.spritesheet('dude',
       'assets/char/Sprites/Idle.png',
       { frameWidth: 103, frameHeight: 104 }
@@ -61,7 +58,7 @@ class GameScene extends Scene {
   }
 
     create() {
-      // this.createMap();
+
       this.physics.world.setBounds(0, 0, 2288, 608)
       const map = this.make.tilemap({ key: "map"});
 
@@ -80,8 +77,6 @@ class GameScene extends Scene {
       const backgroundG = map.createLayer("background7", tileset);
       const backgroundH = map.createLayer("background8", tileset);
       const backgroundI = map.createLayer("background9", tileset);
-
-
 
       backgroundG.setCollisionBetween(0, 475, true, 'backgroundG');
       backgroundD.setCollisionBetween(0, 475, true, 'backgroundD');
@@ -127,7 +122,6 @@ class GameScene extends Scene {
       //   faceColor: new Phaser.Display.Color(40, 39, 37, 255) // Color of colliding face edges
       // });
 
-      // this.createAttack();
       this.attackZone = this.add.zone(this.player.x, this.player.y, 40, 40);
 
       this.createAnimationUpdate();
@@ -137,7 +131,6 @@ class GameScene extends Scene {
       this.physics.add.collider(this.shard, backgroundD);
       this.physics.add.collider(this.shard, backgroundH);
       this.physics.add.collider(this.shard, backgroundI);
-      // this.createBombs();
 
       this.scoreText = this.add.text(16, 16, 'Shards: 0', { fontSize: '32px', fill: '#000' }).setScrollFactor(0);
 
@@ -155,7 +148,7 @@ class GameScene extends Scene {
       this.player.setCollideWorldBounds(true);
       this.player.body.onWorldBounds=true;
 
-      this.physics.world.on('worldbounds', (body, up, down, left, right) => {//if the body collided at the bottom, execute gameover
+      this.physics.world.on('worldbounds', (body, up, down, left, right) => {
         if(down || up || left || right) {
           this.gameOverText.visible = true;
           this.player.anims.play('dead', true);
@@ -216,8 +209,6 @@ class GameScene extends Scene {
       this.enemy.setSize(10, 10, true);
       this.enemy.setOffset(67, 80);
 
-
-
       this.anims.create({
         key: 'idleEnemy',
         frames: this.anims.generateFrameNumbers('enemy', { start: 0, end: 3 }),
@@ -226,19 +217,17 @@ class GameScene extends Scene {
       })
     }
 
-    // How do I reference the attack animation in this code?
     createAnimationUpdate() {
       this.player.on('animationupdate', (anim, frame, sprite, frameKey) => {
-        // it works with 3, 4, 2 frames
         if(anim.key === 'attack1' && frame.index === 3) {
-          // console.log("attacking frame 3");
+          // console.log("attack enabled on frame 3");
           this.physics.world.enable(this.attackZone);
           this.attackZone.x = this.player.x + 50;
           this.attackZone.y = this.player.y - 20;
           this.attackZone.body.height = 50;
         }
         if(anim.key === 'attack1' && frame.index === 4) {
-          // console.log("attacking frame 4");
+          // console.log("attack disabling on frame 4");
           this.physics.world.disable(this.attackZone);
           this.attackZone.x = this.player.x;
           this.attackZone.y = this.player.y;
@@ -248,11 +237,11 @@ class GameScene extends Scene {
 
     createStars() {
 
-      this.shard = this.physics.add.sprite(600, 0, 'shardSheet');
+      this.shard = this.physics.add.sprite(2000, 0, 'shardSheet');
       this.shard.setScale(0.3);
       this.shard.setSize(30, 100, true);
       this.shard.setOffset(80, 100);
-      //
+
       this.anims.create({
         key: 'shardAnimIdle',
         frames: this.anims.generateFrameNumbers('shardSheet', { start: 9, end:12 }),
@@ -268,10 +257,6 @@ class GameScene extends Scene {
       //   repeat: 0
       // });
 
-      // this.shard.children.iterate((child) => {
-      //   child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
-      // });
-
       this.physics.add.overlap(this.attackZone, this.shard, this.collectStar, null, this);
     }
 
@@ -279,35 +264,7 @@ class GameScene extends Scene {
       this.score += 1;
       this.scoreText.setText('Shards: ' + this.score);
       star.disableBody(true, true);
-
-
-      // if (this.shard.countActive(true) === 0) {
-      //   this.stars.children.iterate((child) => {
-      //     child.enableBody(true, child.x, 0, true, true);
-      //   });
-      //
-      //   // uses the players position for bomb location: this is cool!!!
-      //   const x = (this.player.x < 400) ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400);
-      //   const bomb = this.bombs.create(x, 16, 'bomb');
-      //   bomb.setBounce(1);
-      //   bomb.setCollideWorldBounds(true);
-      //   bomb.setVelocity(Phaser.Math.Between(-200, 200), 20); // random bomb direction bounce
-      // }
     }
-
-    // createBombs() {
-    //   this.bombs = this.physics.add.group();
-    //   this.physics.add.collider(this.bombs, this.seaTiled);
-    //   this.physics.add.collider(this.player, this.bombs, this.hitBomb, null, this);
-    // }
-    //
-    // hitBomb(player, bomb) {
-    //   this.physics.pause();
-    //   player.setTint(0xff0000); // player turns red
-    //   this.player.anims.play('dead', true); // player dies
-    //   this.gameOver = true;
-    // }
-
 
 
     ////////////////////////////////////////////////////////////////// update
