@@ -18,7 +18,7 @@ class PreloadScreen extends Scene {
     // this.cache.bitmapFont.add('knighthawks', Phaser.GameObjects.RetroFont.Parse(this, config));
 
     this.input.on('pointerdown', () => this.scene.start('game'))
-  }
+  };
 }
 
 export default PreloadScreen;

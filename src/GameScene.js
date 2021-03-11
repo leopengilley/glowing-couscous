@@ -19,32 +19,32 @@ class GameScene extends Scene {
     this.load.image("skyImage", "assets/bg/sky.png");
     this.load.tilemapTiledJSON("map", "assets/map/phaserGameMap.json");
 
-    this.load.image('star', 'assets/star.png');
-    this.load.image('bomb', 'assets/bomb.png');
+    // this.load.image('star', 'assets/star.png');
+    // this.load.image('bomb', 'assets/bomb.png');
 
     this.load.spritesheet('dude',
       'assets/char/Sprites/Idle.png',
-      { frameWidth: 135, frameHeight: 87 }
+      { frameWidth: 103, frameHeight: 104 }
     );
     this.load.spritesheet('runRight',
       'assets/char/Sprites/Run.png',
-      { frameWidth: 135, frameHeight: 87 }
+      { frameWidth: 103, frameHeight: 104 }
     );
     this.load.spritesheet('runLeft',
-      'assets/char/Sprites/runLeft.png',
-      { frameWidth: 135, frameHeight: 87 }
+      'assets/char/Sprites/RunLeft.png',
+      { frameWidth: 103, frameHeight: 104 }
     );
     this.load.spritesheet('jumpUp',
       'assets/char/Sprites/Jump.png',
-      { frameWidth: 135, frameHeight: 87 }
+      { frameWidth: 103, frameHeight: 104 }
     );
     this.load.spritesheet('death',
       'assets/char/Sprites/Death.png',
-      { frameWidth: 135, frameHeight: 87 }
+      { frameWidth: 103, frameHeight: 104 }
     );
     this.load.spritesheet('attack',
       'assets/char/Sprites/Attack1.png',
-      { frameWidth: 135, frameHeight: 87 }
+      { frameWidth: 103, frameHeight: 104 }
     );
 
     // enemy
@@ -53,6 +53,7 @@ class GameScene extends Scene {
       { frameWidth: 128, frameHeight: 123 }
     );
 
+    // shard
     this.load.spritesheet('shardSheet',
       'assets/CrystaFragments.png',
       { frameWidth: 200, frameHeight: 256 }
@@ -92,7 +93,7 @@ class GameScene extends Scene {
       backgroundI.setCollisionByProperty({ collides: true });
 
       const camera = this.cameras.main;
-      camera.setBounds(0, 0, backgroundA.widthInPixels, config.height);
+      camera.setBounds(0, 0, 2288, config.height);
 
       // Set up the arrows to control the camera
       this.cursors = this.input.keyboard.createCursorKeys();
@@ -138,18 +139,19 @@ class GameScene extends Scene {
       this.physics.add.collider(this.shard, backgroundI);
       // this.createBombs();
 
-      this.scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
+      this.scoreText = this.add.text(16, 16, 'Shards: 0', { fontSize: '32px', fill: '#000' }).setScrollFactor(0);
 
-      this.gameOverText = this.add.text(215, 300, 'Game Over Click to play again', {fontSize: '42px', fill: 'red'}).setOrigin(.25);
+      this.gameOverText = this.add.text(100, 300, 'Game Over Click to play again', {fontSize: '42px', fill: 'red'}).setScrollFactor(0);
       this.gameOverText.visible = false;
     }
 
 
     createPlayer() {
       this.player = this.physics.add.sprite(100, 0, 'dude');
+      this.player.setScale(1.3);
       this.player.setBounce(0.2);
       this.player.setSize(10, 10, true);
-      this.player.setOffset(67, 68);
+      this.player.setOffset(45, 55);
       this.player.setCollideWorldBounds(true);
       this.player.body.onWorldBounds=true;
 
@@ -167,21 +169,21 @@ class GameScene extends Scene {
 
       this.anims.create({
         key: 'idle',
-        frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 9 }),
-        frameRate: 20,
+        frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 4 }),
+        frameRate: 10,
         repeat: 0
       })
 
       this.anims.create({
           key: 'moveRight',
-          frames: this.anims.generateFrameNumbers('runRight', { start: 0, end: 5 }),
+          frames: this.anims.generateFrameNumbers('runRight', { start: 0, end: 8 }),
           frameRate: 10,
           repeat: 0
       });
 
       this.anims.create({
           key: 'moveLeft',
-          frames: this.anims.generateFrameNumbers('runLeft', { start: 0, end: 5 }),
+          frames: this.anims.generateFrameNumbers('runLeft', { start: 0, end: 8 }),
           frameRate: 10,
           repeat: 0
       });
@@ -209,6 +211,7 @@ class GameScene extends Scene {
 
     createEnemy() {
       this.enemy = this.physics.add.sprite(400, 0, 'enemy');
+      this.enemy.setScale(1.3);
       this.enemy.setBounce(0.2);
       this.enemy.setSize(10, 10, true);
       this.enemy.setOffset(67, 80);
@@ -273,8 +276,8 @@ class GameScene extends Scene {
     }
 
     collectStar(player, star) {
-      this.score += 10;
-      this.scoreText.setText('Score: ' + this.score);
+      this.score += 1;
+      this.scoreText.setText('Shards: ' + this.score);
       star.disableBody(true, true);
 
 
