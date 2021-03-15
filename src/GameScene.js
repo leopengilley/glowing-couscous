@@ -126,7 +126,7 @@ class GameScene extends Scene {
 
       this.createAnimationUpdate();
 
-      this.createStars();
+      this.createShards();
       this.physics.add.collider(this.shard, backgroundG);
       this.physics.add.collider(this.shard, backgroundD);
       this.physics.add.collider(this.shard, backgroundH);
@@ -136,6 +136,10 @@ class GameScene extends Scene {
 
       this.gameOverText = this.add.text(100, 300, 'Game Over Click to play again', {fontSize: '42px', fill: 'red'}).setScrollFactor(0);
       this.gameOverText.visible = false;
+
+      this.gameWinText = this.add.text(100, 300, 'You win! Click to play again', {fontSize: '42px', fill: 'white'}).setScrollFactor(0);
+      this.gameWinText.visible = false;
+
     }
 
 
@@ -235,7 +239,7 @@ class GameScene extends Scene {
       });
     }
 
-    createStars() {
+    createShards() {
 
       this.shard = this.physics.add.sprite(2000, 0, 'shardSheet');
       this.shard.setScale(0.3);
@@ -257,14 +261,14 @@ class GameScene extends Scene {
       //   repeat: 0
       // });
 
-      this.physics.add.overlap(this.attackZone, this.shard, this.collectStar, null, this);
+      this.physics.add.overlap(this.attackZone, this.shard, this.collectShard, null, this);
     }
 
-    collectStar(player, star) {
+    collectShard(player, star) {
       this.score += 1;
       this.scoreText.setText('Shards: ' + this.score);
       star.disableBody(true, true);
-      this.gameOverText.visible = true;
+      this.gameWinText.visible = true;
       this.gameOver = true;
       this.input.on('pointerdown', () => {
         this.scene.start('preload');
