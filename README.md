@@ -124,9 +124,10 @@ backgroundI.setCollisionByProperty({ collides: true });
 
 ## Bugs
 * If you keep the spacebar pressed down, the player will keep moving upwards.
-* There is no way to win the game at the moment.
 
 ## Future Plan
+* Adding instructions on how to play.
+* Adding music and sound effects.
 * My future plan is to create a story lined game where the player must defeat a few enemies before a larger final one. A health system and a power up system, so when the player collects a shard his attack or health increases.
 * To clean up the code and create separate files for each game component.
 
