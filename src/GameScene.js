@@ -284,12 +284,12 @@ class GameScene extends Scene {
       this.shard.anims.play('shardAnimIdle', true);
 
       if (this.gameOver !== true) {
-        if (this.cursors.right.isDown) {
-          this.player.setVelocityX(160);
-          this.player.anims.play('moveRight', true);
-        } else if (this.cursors.left.isDown) {
+        if (this.cursors.left.isDown) {
           this.player.setVelocityX(-160);
           this.player.anims.play('moveLeft', true);
+        } else if (this.cursors.right.isDown) {
+          this.player.setVelocityX(160);
+          this.player.anims.play('moveRight', true);
         } else if (this.cursors.space.isDown) {
           this.player.anims.play('attack1', true);
         } else {
