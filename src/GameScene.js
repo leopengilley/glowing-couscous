@@ -28,7 +28,7 @@ class GameScene extends Scene {
       { frameWidth: 103, frameHeight: 104 }
     );
     this.load.spritesheet('runLeft',
-      'assets/char/Sprites/RunLeft.png',
+      'assets/char/Sprites/Run2.png',
       { frameWidth: 103, frameHeight: 104 }
     );
     this.load.spritesheet('jumpUp',
@@ -191,12 +191,14 @@ class GameScene extends Scene {
           frameRate: 1,
           repeat: -1
       });
+
       this.anims.create({
           key: 'dead',
           frames: this.anims.generateFrameNumbers('death', { start: 0, end: 8 }),
           frameRate: 10,
           hideOnComplete: true
       });
+
       this.anims.create({
           key: 'attack1',
           frames: this.anims.generateFrameNumbers('attack', { start: 0, end: 3 }),
@@ -218,7 +220,7 @@ class GameScene extends Scene {
         frames: this.anims.generateFrameNumbers('enemy', { start: 0, end: 3 }),
         frameRate: 10,
         repeat: 0
-      })
+      });
     }
 
     createAnimationUpdate() {
