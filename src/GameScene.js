@@ -28,7 +28,7 @@ class GameScene extends Scene {
       { frameWidth: 103, frameHeight: 104 }
     );
     this.load.spritesheet('runLeft',
-      'assets/char/Sprites/RunLeft.png',
+      'assets/char/Sprites/runLeft.png',
       { frameWidth: 103, frameHeight: 104 }
     );
     this.load.spritesheet('jumpUp',
