@@ -132,12 +132,12 @@ class GameScene extends Scene {
       this.physics.add.collider(this.shard, backgroundH);
       this.physics.add.collider(this.shard, backgroundI);
 
-      this.scoreText = this.add.text(16, 16, 'Shards: 0', { fontSize: '32px', fill: '#000' }).setScrollFactor(0);
+      this.instructions = this.add.text(300, 450, ' To complete the task,\n you must find the crystal and destroy it...', {fontSize: '18px', fill: 'white'});
 
-      this.gameOverText = this.add.text(100, 300, 'Game Over Click to play again', {fontSize: '42px', fill: 'red'}).setScrollFactor(0);
+      this.gameOverText = this.add.text(120, 100, '     Game Over...\n Click to try again.', {fontSize: '42px', fill: 'red'}).setScrollFactor(0);
       this.gameOverText.visible = false;
 
-      this.gameWinText = this.add.text(100, 300, 'You win! Click to play again', {fontSize: '42px', fill: 'white'}).setScrollFactor(0);
+      this.gameWinText = this.add.text(60, 100, 'You win! Click to play again.', {fontSize: '42px', fill: 'white'}).setScrollFactor(0);
       this.gameWinText.visible = false;
 
     }
@@ -268,7 +268,6 @@ class GameScene extends Scene {
 
     collectShard(player, star) {
       this.score += 1;
-      this.scoreText.setText('Shards: ' + this.score);
       star.disableBody(true, true);
       this.gameWinText.visible = true;
       this.gameOver = true;
