@@ -44,17 +44,33 @@ class GameScene extends Scene {
       { frameWidth: 103, frameHeight: 104 }
     );
 
-    // enemy
+    // enemy 1
     this.load.spritesheet('enemy',
       'assets/enemy/sprites/Idle.png',
       { frameWidth: 128, frameHeight: 123 }
     );
 
-    // shard
-    this.load.spritesheet('shardSheet',
-      'assets/CrystaFragments.png',
-      { frameWidth: 200, frameHeight: 256 }
-    );
+    // enemy 2
+    // this.load.spritesheet('enemy2',
+    //   'assets/enemy2/enemy2.png',
+    //   { frameWidth: 200, frameHeight: 123 }
+    // );
+    //
+    // this.load.spritesheet('enemy2RunRight',
+    //   'assets/enemy2/enemy2RunRight.png',
+    //   { frameWidth: 128, frameHeight: 123 }
+    // );
+    //
+    // this.load.spritesheet('enemy2RunLeft',
+    //   'assets/enemy2/enemy2RunLeft.png',
+    //   { frameWidth: 128, frameHeight: 123 }
+    // );
+    //
+    // // shard
+    // this.load.spritesheet('shardSheet',
+    //   'assets/CrystaFragments.png',
+    //   { frameWidth: 200, frameHeight: 256 }
+    // );
   }
 
     create() {
@@ -112,6 +128,12 @@ class GameScene extends Scene {
       this.physics.add.collider(this.enemy, backgroundD);
       this.physics.add.collider(this.enemy, backgroundH);
       this.physics.add.collider(this.enemy, backgroundI);
+
+      // this.createEnemy2();
+      // this.physics.add.collider(this.enemy2, backgroundG);
+      // this.physics.add.collider(this.enemy2, backgroundD);
+      // this.physics.add.collider(this.enemy2, backgroundH);
+      // this.physics.add.collider(this.enemy2, backgroundI);
 
       camera.startFollow(this.player);
 
@@ -221,6 +243,38 @@ class GameScene extends Scene {
       })
     }
 
+    // createEnemy2() {
+    //   this.enemy2 = this.physics.add.sprite(700, 0, 'enemy2');
+    //   this.enemy2.setScale(1.3);
+    //   this.enemy2.setBounce(0.2);
+    //   this.enemy2.setSize(10, 10, true);
+    //   this.enemy2.setOffset(67, 100);
+    //   this.enemy2.enableBody = true;
+    //   this.enemy2.body.velocity.x = 80;
+    //
+    //
+    //   this.anims.create({
+    //     key: 'idleEnemy2',
+    //     frames: this.anims.generateFrameNumbers('enemy2', { start: 0, end: 3 }),
+    //     frameRate: 10,
+    //     repeat: 0
+    //   })
+    //
+    //   this.anims.create({
+    //     key: 'enemy2Right',
+    //     frames: this.anims.generateFrameNumbers('enemy2RunRight', { start: 0, end: 6 }),
+    //     frameRate: 10,
+    //     repeat: 0
+    //   })
+    //
+    //   this.anims.create({
+    //     key: 'enemy2RunLeft',
+    //     frames: this.anims.generateFrameNumbers('enemy2RunLeft', { start: 6, end: 0 }),
+    //     frameRate: 10,
+    //     repeat: 0
+    //   })
+    // }
+
     createAnimationUpdate() {
       this.player.on('animationupdate', (anim, frame, sprite, frameKey) => {
         if(anim.key === 'attack1' && frame.index === 3) {
@@ -280,6 +334,7 @@ class GameScene extends Scene {
     update(time, delta) {
       this.controls.update(delta);
       this.enemy.anims.play('idleEnemy', true);
+      // this.enemy2.anims.play('idleEnemy2', true);
       this.shard.anims.play('shardAnimIdle', true);
 
       if (this.gameOver !== true) {
