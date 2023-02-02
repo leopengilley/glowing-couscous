@@ -297,8 +297,8 @@ class GameScene extends Scene {
 
       this.shard = this.physics.add.sprite(2000, 0, 'shardSheet');
       this.shard.setScale(0.3);
-      this.shard.setSize(70, 100, true);
-      this.shard.setOffset(70, 100);
+      this.shard.setSize(30, 100, true);
+      this.shard.setOffset(80, 100);
 
       this.anims.create({
         key: 'shardAnimIdle',
