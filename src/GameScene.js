@@ -50,6 +50,16 @@ class GameScene extends Scene {
       { frameWidth: 128, frameHeight: 123 }
     );
 
+    this.load.spritesheet('enemyRunRight',
+      'assets/enemy/sprites/Run.png',
+      { frameWidth: 128, frameHeight: 123 }
+    );
+
+    this.load.spritesheet('enemyRunLeft',
+      'assets/enemy/sprites/RunLeft.png',
+      { frameWidth: 128, frameHeight: 123 }
+    );
+
     // enemy 2
     // this.load.spritesheet('enemy2',
     //   'assets/enemy2/enemy2.png',
@@ -129,6 +139,16 @@ class GameScene extends Scene {
       this.physics.add.collider(this.enemy, backgroundH);
       this.physics.add.collider(this.enemy, backgroundI);
 
+      // Set a delay before starting the enemy's movement (in milliseconds)
+      const delayBeforeMovement = 1000; // 1 second delay
+
+      // Delay before starting the enemy's movement
+      this.time.delayedCall(delayBeforeMovement, () => {
+        // Start the enemy's movement initially (change to true or false depending on the initial direction)
+        this.setEnemyAnimation(true);
+        this.moveEnemy();
+      }, [], this);
+
       // this.createEnemy2();
       // this.physics.add.collider(this.enemy2, backgroundG);
       // this.physics.add.collider(this.enemy2, backgroundD);
@@ -154,7 +174,7 @@ class GameScene extends Scene {
       this.physics.add.collider(this.shard, backgroundH);
       this.physics.add.collider(this.shard, backgroundI);
 
-      this.instructions = this.add.text(300, 450, ' To complete the task,\n you must find the crystal and destroy it...', {fontSize: '18px', fill: 'white'});
+      this.instructions = this.add.text(300, 450, 'You must find the crystal and destroy it!', {fontSize: '18px', fill: 'white'});
 
       this.gameOverText = this.add.text(120, 100, '     Game Over...\n Click to try again.', {fontSize: '42px', fill: 'red'}).setScrollFactor(0);
       this.gameOverText.visible = false;
@@ -229,7 +249,7 @@ class GameScene extends Scene {
     }
 
     createEnemy() {
-      this.enemy = this.physics.add.sprite(400, 0, 'enemy');
+      this.enemy = this.physics.add.sprite(600, 0, 'idleEnemy');
       this.enemy.setScale(1.3);
       this.enemy.setBounce(0.2);
       this.enemy.setSize(10, 10, true);
@@ -241,6 +261,69 @@ class GameScene extends Scene {
         frameRate: 10,
         repeat: 0
       })
+
+      this.enemy.anims.play('idleEnemy', true);
+
+
+      // Create animation for moving forward
+      this.anims.create({
+        key: 'enemyRunRight',
+        frames: this.anims.generateFrameNumbers('enemyRunRight', { start: 0, end: 7 }),
+        frameRate: 10,
+        repeat: -1 // -1 means the animation will loop indefinitely
+      })
+
+      // Create animation for moving backward
+      this.anims.create({
+        key: 'enemyRunLeft',
+        frames: this.anims.generateFrameNumbers('enemyRunLeft', { start: 0, end: 7 }),
+        frameRate: 10,
+        repeat: -1
+      })
+    }
+
+    moveEnemy() {
+      // Create a timeline tween for horizontal movement
+      this.tweens.timeline({
+        targets: this.enemy,
+        loop: -1, // -1 means the tween will loop indefinitely
+        tweens: [
+          {
+            x: 300, // Move to the right at x = 200
+            duration: 3000, // Duration in milliseconds
+            ease: 'Power1', // Easing function for smooth movement
+            onStart: () => this.setEnemyAnimation(true), // Set animation to moveForward when starting the tween
+            onComplete: () => this.setEnemyAnimation(false), // Set animation to moveBackward when completing the tween
+          },
+          {
+            x: 600, // Move back to the starting position
+            duration: 3000,
+            ease: 'Power1',
+            onStart: () => this.setEnemyAnimation(false), // Set animation to moveBackward when starting the tween
+            onComplete: () => this.setEnemyAnimation(true), // Set animation to moveForward when completing the tween
+          },
+          {
+            x: 600, // Pause at the starting position
+            duration: 2000, // Duration of the pause in milliseconds
+            ease: 'Power0', // Use Power0 easing for a linear pause (no acceleration)
+            onStart: () => this.enemy.anims.play('idleEnemy'), // Set animation to moveBackward when starting the tween
+            onComplete: () => this.setEnemyAnimation(true), // Set animation to idle when completing the tween
+          },
+        ],
+      });
+    }
+
+      // Play the idleEnemy animation initially
+      // this.enemy.anims.play('idleEnemy');
+
+    setEnemyAnimation(isMovingForward) {
+      if (isMovingForward) {
+        console.log('Moving Forward');
+        this.enemy.anims.play('enemyRunLeft');
+      } else {
+        console.log('Moving backward');
+        this.enemy.anims.play('enemyRunRight');
+      }
     }
 
     // createEnemy2() {
@@ -333,7 +416,7 @@ class GameScene extends Scene {
     ////////////////////////////////////////////////////////////////// update
     update(time, delta) {
       this.controls.update(delta);
-      this.enemy.anims.play('idleEnemy', true);
+      // this.enemy.anims.play('idleEnemy', true);
       // this.enemy2.anims.play('idleEnemy2', true);
       this.shard.anims.play('shardAnimIdle', true);
 
