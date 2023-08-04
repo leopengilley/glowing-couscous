@@ -66,11 +66,11 @@ class GameScene extends Scene {
     //   { frameWidth: 128, frameHeight: 123 }
     // );
     //
-    // // shard
-    // this.load.spritesheet('shardSheet',
-    //   'assets/CrystaFragments.png',
-    //   { frameWidth: 200, frameHeight: 256 }
-    // );
+    // shard
+    this.load.spritesheet('shardSheet',
+      'assets/CrystaFragments.png',
+      { frameWidth: 200, frameHeight: 256 }
+    );
   }
 
     create() {
