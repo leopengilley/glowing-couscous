@@ -164,12 +164,12 @@ class GameScene extends Scene {
         // this.moveEnemy();
       }, [], this);
 
-      // Delay before starting the enemy's movement
-      this.time.delayedCall(delayBeforeMovement, () => {
-        // Start the enemy's movement initially (change to true or false depending on the initial direction)
-        this.setEnemy2Animation(true);
-        // this.moveEnemy();
-      }, [], this);
+      // // Delay before starting the enemy's movement
+      // this.time.delayedCall(delayBeforeMovement, () => {
+      //   // Start the enemy's movement initially (change to true or false depending on the initial direction)
+      //   this.setEnemy2Animation(true);
+      //   // this.moveEnemy();
+      // }, [], this);
 
       camera.startFollow(this.player);
 
@@ -286,43 +286,43 @@ class GameScene extends Scene {
       this.physics.add.overlap(this.attackZone, this.enemy2, this.killEnemy2, null, this);
       this.enemy2.anims.play('enemy2RunLeft', true);
 
-      // Function to move character back and forth
-      const moveCharacter = () => {
-
-        // console.log("Current texture key before tween starts:", this.enemy.texture.key);
-        // Define your tween animation
-        this.tweens.add({
-            targets: this.enemy2,
-            x: 500,
-            // y: newY,
-            duration: 3000, // Duration in milliseconds
-            ease: 'Linear', // Easing function (e.g., Linear, Power1, etc.)
-            onComplete: () => {
-
-                this.enemy2.anims.play('enemy2RunRight', true);
-                // console.log("Current texture key after moving right:", this.enemy.texture.key);
-                // Once the first tween completes, start the second tween to move the character back
-                this.tweens.add({
-                    targets: this.enemy2,
-                    x: 700,
-                    duration: 3000,
-                    ease: 'Linear',
-                    onComplete: () => {
-
-
-                    // console.log("Current texture key after moving left:", this.enemy.texture.key);
-
-                    this.enemy2.anims.play('enemy2RunLeft', true);
-                      // Recursive call to move the character continuously
-                    moveCharacter();
-                  }
-                });
-            }
-        });
-      };
-
-      // Initial call to start moving the character
-      moveCharacter();
+      // // Function to move character back and forth
+      // const moveCharacter = () => {
+      //
+      //   // console.log("Current texture key before tween starts:", this.enemy.texture.key);
+      //   // Define your tween animation
+      //   this.tweens.add({
+      //       targets: this.enemy2,
+      //       x: 500,
+      //       // y: newY,
+      //       duration: 3000, // Duration in milliseconds
+      //       ease: 'Linear', // Easing function (e.g., Linear, Power1, etc.)
+      //       onComplete: () => {
+      //
+      //           this.enemy2.anims.play('enemy2RunRight', true);
+      //           // console.log("Current texture key after moving right:", this.enemy.texture.key);
+      //           // Once the first tween completes, start the second tween to move the character back
+      //           this.tweens.add({
+      //               targets: this.enemy2,
+      //               x: 700,
+      //               duration: 3000,
+      //               ease: 'Linear',
+      //               onComplete: () => {
+      //
+      //
+      //               // console.log("Current texture key after moving left:", this.enemy.texture.key);
+      //
+      //               this.enemy2.anims.play('enemy2RunLeft', true);
+      //                 // Recursive call to move the character continuously
+      //               moveCharacter();
+      //             }
+      //           });
+      //       }
+      //   });
+      // };
+      //
+      // // Initial call to start moving the character
+      // moveCharacter();
 
     }
 
@@ -467,15 +467,15 @@ class GameScene extends Scene {
       }
     }
 
-    setEnemy2Animation(isMovingForward) {
-      if (isMovingForward) {
-        console.log('Moving Forward');
-        this.enemy2.anims.play('enemy2RunLeft');
-      } else {
-        console.log('Moving backward');
-        this.enemy2.anims.play('enemy2RunRight');
-      }
-    }
+    // setEnemy2Animation(isMovingForward) {
+    //   if (isMovingForward) {
+    //     console.log('Moving Forward');
+    //     this.enemy2.anims.play('enemy2RunLeft');
+    //   } else {
+    //     console.log('Moving backward');
+    //     this.enemy2.anims.play('enemy2RunRight');
+    //   }
+    // }
 
     createShards() {
 
@@ -553,6 +553,21 @@ class GameScene extends Scene {
           this.player.anims.play('up', true);
         }
       }
+
+
+      // Update first enemy movement to follow the player
+      let speed = 100;
+      let distanceX = this.player.x - this.enemy2.x;
+      let distanceY = this.player.y - this.enemy2.y;
+      let length = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+      if (length > 0) {
+          let normalizedX = distanceX / length;
+          let normalizedY = distanceY / length;
+          this.enemy2.setVelocityX(normalizedX * speed);
+          this.enemy2.setVelocityY(normalizedY * speed);
+      }
+
+
     }
 }
 
