@@ -158,11 +158,11 @@ class GameScene extends Scene {
       const delayBeforeMovement = 1000; // 1 second delay
 
       // Delay before starting the enemy's movement
-      this.time.delayedCall(delayBeforeMovement, () => {
-        // Start the enemy's movement initially (change to true or false depending on the initial direction)
-        this.setEnemyAnimation(true);
-        // this.moveEnemy();
-      }, [], this);
+      // this.time.delayedCall(delayBeforeMovement, () => {
+      //   // Start the enemy's movement initially (change to true or false depending on the initial direction)
+      //   this.setEnemyAnimation(true);
+      //   // this.moveEnemy();
+      // }, [], this);
 
       // // Delay before starting the enemy's movement
       // this.time.delayedCall(delayBeforeMovement, () => {
@@ -170,6 +170,8 @@ class GameScene extends Scene {
       //   this.setEnemy2Animation(true);
       //   // this.moveEnemy();
       // }, [], this);
+
+      this.isEnemy2Running = false;
 
       camera.startFollow(this.player);
 
@@ -253,7 +255,7 @@ class GameScene extends Scene {
     }
 
     createEnemy2() {
-      this.enemy2 = this.physics.add.sprite(700, 0, 'enemy2RunLeft');
+      this.enemy2 = this.physics.add.sprite(700, 0, 'enemy2');
       this.enemy2.setScale(1.3);
       this.enemy2.setBounce(0.2);
       this.enemy2.setSize(10, 10, true);
@@ -263,7 +265,7 @@ class GameScene extends Scene {
 
 
       this.anims.create({
-        key: 'idleEnemy2',
+        key: 'enemy2',
         frames: this.anims.generateFrameNumbers('enemy2', { start: 0, end: 3 }),
         frameRate: 10,
         repeat: 0
@@ -284,7 +286,7 @@ class GameScene extends Scene {
       })
 
       this.physics.add.overlap(this.attackZone, this.enemy2, this.killEnemy2, null, this);
-      this.enemy2.anims.play('enemy2RunLeft', true);
+      this.enemy2.anims.play('enemy2', true);
 
       // // Function to move character back and forth
       // const moveCharacter = () => {
@@ -320,9 +322,7 @@ class GameScene extends Scene {
       //       }
       //   });
       // };
-      //
-      // // Initial call to start moving the character
-      // moveCharacter();
+
 
     }
 
@@ -345,7 +345,7 @@ class GameScene extends Scene {
     }
 
     createEnemy() {
-      this.enemy = this.physics.add.sprite(600, 0, 'enemyRunLeft');
+      this.enemy = this.physics.add.sprite(600, 0, 'idleEnemy');
       this.enemy.setScale(1.3);
       this.enemy.setBounce(0.2);
       this.enemy.setSize(10, 10, true);
@@ -368,9 +368,6 @@ class GameScene extends Scene {
         repeat: 0
       })
 
-      this.enemy.anims.play('enemyRunLeft', true);
-
-
       // Create animation for moving forward
       this.anims.create({
         key: 'enemyRunRight',
@@ -387,46 +384,49 @@ class GameScene extends Scene {
         repeat: -1
       })
 
+      // this.enemy.anims.play('idleEnemy', true);
+
+
       this.physics.add.overlap(this.attackZone, this.enemy, this.killEnemy, null, this);
 
 
-      // Function to move character back and forth
-      const moveCharacter = () => {
-
-        // console.log("Current texture key before tween starts:", this.enemy.texture.key);
-        // Define your tween animation
-        this.tweens.add({
-            targets: this.enemy,
-            x: 400,
-            // y: newY,
-            duration: 3000, // Duration in milliseconds
-            ease: 'Linear', // Easing function (e.g., Linear, Power1, etc.)
-            onComplete: () => {
-
-                this.enemy.anims.play('enemyRunRight', true);
-                // console.log("Current texture key after moving right:", this.enemy.texture.key);
-                // Once the first tween completes, start the second tween to move the character back
-                this.tweens.add({
-                    targets: this.enemy,
-                    x: 600,
-                    duration: 3000,
-                    ease: 'Linear',
-                    onComplete: () => {
-
-
-                    // console.log("Current texture key after moving left:", this.enemy.texture.key);
-
-                    this.enemy.anims.play('enemyRunLeft', true);
-                      // Recursive call to move the character continuously
-                    moveCharacter();
-                  }
-                });
-            }
-        });
-      };
-
-      // Initial call to start moving the character
-      moveCharacter();
+      // // Function to move character back and forth
+      // const moveCharacter = () => {
+      //
+      //   // console.log("Current texture key before tween starts:", this.enemy.texture.key);
+      //   // Define your tween animation
+      //   this.tweens.add({
+      //       targets: this.enemy,
+      //       x: 400,
+      //       // y: newY,
+      //       duration: 3000, // Duration in milliseconds
+      //       ease: 'Linear', // Easing function (e.g., Linear, Power1, etc.)
+      //       onComplete: () => {
+      //
+      //           this.enemy.anims.play('enemyRunRight', true);
+      //           // console.log("Current texture key after moving right:", this.enemy.texture.key);
+      //           // Once the first tween completes, start the second tween to move the character back
+      //           this.tweens.add({
+      //               targets: this.enemy,
+      //               x: 600,
+      //               duration: 3000,
+      //               ease: 'Linear',
+      //               onComplete: () => {
+      //
+      //
+      //               // console.log("Current texture key after moving left:", this.enemy.texture.key);
+      //
+      //               this.enemy.anims.play('enemyRunLeft', true);
+      //                 // Recursive call to move the character continuously
+      //               moveCharacter();
+      //             }
+      //           });
+      //       }
+      //   });
+      // };
+      //
+      // // Initial call to start moving the character
+      // moveCharacter();
 
     }
 
@@ -456,26 +456,26 @@ class GameScene extends Scene {
     //   // Start the timeline tween
     //   timeline.play();
     // }
-
-    setEnemyAnimation(isMovingForward) {
-      if (isMovingForward) {
-        console.log('Moving Forward');
-        this.enemy.anims.play('enemyRunLeft');
-      } else {
-        console.log('Moving backward');
-        this.enemy.anims.play('enemyRunRight');
-      }
-    }
-
-    // setEnemy2Animation(isMovingForward) {
+    //
+    // setEnemyAnimation(isMovingForward) {
     //   if (isMovingForward) {
     //     console.log('Moving Forward');
-    //     this.enemy2.anims.play('enemy2RunLeft');
+    //     this.enemy.anims.play('enemyRunLeft');
     //   } else {
     //     console.log('Moving backward');
-    //     this.enemy2.anims.play('enemy2RunRight');
+    //     this.enemy.anims.play('enemyRunRight');
     //   }
     // }
+
+    setEnemy2Animation(isMovingForward) {
+      if (isMovingForward) {
+        console.log('Moving Forward');
+        this.enemy2.anims.play('enemy2RunLeft');
+      } else {
+        console.log('Moving backward');
+        this.enemy2.anims.play('enemy2RunRight');
+      }
+    }
 
     createShards() {
 
@@ -528,12 +528,19 @@ class GameScene extends Scene {
       });
     }
 
-
     ////////////////////////////////////////////////////////////////// update
     update(time, delta) {
       this.controls.update(delta);
-      // this.enemy.anims.play('idleEnemy', true);
-      // this.enemy2.anims.play('idleEnemy2', true);
+      if (this.enemy.anims) {
+        this.enemy.anims.play('idleEnemy', true);
+      }
+
+      // if (this.isEnemy2Running) {
+      //     this.enemy2.anims.play('enemy2RunLeft', true);
+      // } else {
+      //     this.enemy2.anims.play('enemy2', true);
+      // }
+
       this.shard.anims.play('shardAnimIdle', true);
 
       if (this.gameOver !== true) {
@@ -560,14 +567,33 @@ class GameScene extends Scene {
       let distanceX = this.player.x - this.enemy2.x;
       let distanceY = this.player.y - this.enemy2.y;
       let length = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
-      if (length > 0) {
+      if (length < 200 && this.enemy2.anims) {
           let normalizedX = distanceX / length;
           let normalizedY = distanceY / length;
           this.enemy2.setVelocityX(normalizedX * speed);
           this.enemy2.setVelocityY(normalizedY * speed);
+
+          // Check if enemy too far
+          if (length > 199) {
+            this.enemy2.setVelocityX(0);
+            this.enemy2.setVelocityY(0);
+          }
+
+          // Check if enemy is moving left
+          if (normalizedX < 0) {
+              // this.setEnemy2Animation(true)
+              // console.log('Is animation playing:', this.enemy2.anims.isPlaying);
+              this.enemy2.anims.play('enemy2RunLeft', true);
+              // this.isEnemy2Running = true;
+          } else {
+              // Stop the animation or play another animation for other cases
+              // Example: this.enemy2.anims.stop();
+              // this.setEnemy2Animation(false)
+              this.enemy2.anims.play('enemy2RunRight', true);
+          }
+      } else if (this.enemy2.anims) {
+        this.enemy2.anims.play('enemy2', true);
       }
-
-
     }
 }
 
