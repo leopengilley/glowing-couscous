@@ -23,6 +23,12 @@ class GameScene extends Scene {
       'assets/char/Sprites/Idle.png',
       { frameWidth: 103, frameHeight: 104 }
     );
+
+    this.load.spritesheet('idleLeft',
+      'assets/char/Sprites/IdleLeft.png',
+      { frameWidth: 103, frameHeight: 104 }
+    );
+
     this.load.spritesheet('runRight',
       'assets/char/Sprites/Run.png',
       { frameWidth: 103, frameHeight: 104 }
@@ -216,7 +222,14 @@ class GameScene extends Scene {
         key: 'idle',
         frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 4 }),
         frameRate: 10,
-        repeat: 0
+        repeat: -1
+      })
+
+      this.anims.create({
+        key: 'idleLeft',
+        frames: this.anims.generateFrameNumbers('idleLeft', { start: 0, end: 4 }),
+        frameRate: 10,
+        repeat: -1
       })
 
       this.anims.create({
@@ -236,7 +249,7 @@ class GameScene extends Scene {
       this.anims.create({
           key: 'up',
           frames: this.anims.generateFrameNumbers('jumpUp', { start: 0, end: 1 }),
-          frameRate: 1,
+          frameRate: 10,
           repeat: -1
       });
       this.anims.create({
@@ -252,6 +265,8 @@ class GameScene extends Scene {
           yoyo: false,
           repeat: -1
       });
+
+      this.player.anims.play('idle', true);
     }
 
     createEnemy2() {
@@ -553,9 +568,22 @@ class GameScene extends Scene {
         } else if (this.cursors.space.isDown) {
           this.player.anims.play('attack1', true);
         } else {
+          // Play appropriate idle animation based on the previous movement
+          if (this.player.body.velocity.x > 0) {
+              // If previously moving right, play idle animation facing right
+              this.player.anims.play('idle', true);
+              console.log("idle");
+          } else if (this.player.body.velocity.x < 0) {
+              // If previously moving left, play idleLeft animation
+              this.player.anims.play('idleLeft', true);
+              console.log("idle left");
+          }
+
+          // If neither right nor left is pressed, stop horizontal movement
           this.player.setVelocityX(0);
-          this.player.anims.play('idle', true);
-        } if (this.cursors.up.isDown) {
+        }
+
+        if (this.cursors.up.isDown) {
           this.player.setVelocityY(-180);
           this.player.anims.play('up', true);
         }
@@ -574,6 +602,7 @@ class GameScene extends Scene {
           this.enemy2.setVelocityY(normalizedY * speed);
 
           // Check if enemy too far
+
           if (length > 199) {
             this.enemy2.setVelocityX(0);
             this.enemy2.setVelocityY(0);
