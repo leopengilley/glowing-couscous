@@ -178,6 +178,7 @@ class GameScene extends Scene {
       // }, [], this);
 
       this.isEnemy2Running = false;
+      this.playerAttack = false;
 
       camera.startFollow(this.player);
 
@@ -263,7 +264,7 @@ class GameScene extends Scene {
           frames: this.anims.generateFrameNumbers('attack', { start: 0, end: 3 }),
           frameRate: 20,
           yoyo: false,
-          repeat: -1
+          repeat: 0
       });
 
       this.player.anims.play('idle', true);
@@ -344,17 +345,18 @@ class GameScene extends Scene {
     createAnimationUpdate() {
       this.player.on('animationupdate', (anim, frame, sprite, frameKey) => {
         if(anim.key === 'attack1' && frame.index === 3) {
-          // console.log("attack enabled on frame 3");
+          console.log("attack enabled on frame 3");
           this.physics.world.enable(this.attackZone);
           this.attackZone.x = this.player.x + 50;
           this.attackZone.y = this.player.y - 20;
           this.attackZone.body.height = 50;
         }
         if(anim.key === 'attack1' && frame.index === 4) {
-          // console.log("attack disabling on frame 4");
+          console.log("attack disabling on frame 4");
           this.physics.world.disable(this.attackZone);
           this.attackZone.x = this.player.x;
           this.attackZone.y = this.player.y;
+          this.player.anims.play('idle', true);
         }
       });
     }
@@ -565,8 +567,10 @@ class GameScene extends Scene {
         } else if (this.cursors.left.isDown) {
           this.player.setVelocityX(-160);
           this.player.anims.play('moveLeft', true);
-        } else if (this.cursors.space.isDown) {
+        } else if (this.cursors.space.isDown && this.playerAttack === false) {
           this.player.anims.play('attack1', true);
+          this.playerAttack = true;
+          // console.log("attacking");
         } else {
           // Play appropriate idle animation based on the previous movement
           if (this.player.body.velocity.x > 0) {
@@ -586,6 +590,8 @@ class GameScene extends Scene {
         if (this.cursors.up.isDown) {
           this.player.setVelocityY(-180);
           this.player.anims.play('up', true);
+        } if (this.cursors.space.isUp) {
+          this.playerAttack = false;
         }
       }
 
