@@ -49,6 +49,10 @@ class GameScene extends Scene {
       'assets/char/Sprites/Attack1.png',
       { frameWidth: 103, frameHeight: 104 }
     );
+    this.load.spritesheet('attackLeft',
+      'assets/char/Sprites/Attack1Left.png',
+      { frameWidth: 103, frameHeight: 104 }
+    );
 
     // enemy 1
     this.load.spritesheet('enemy',
@@ -262,7 +266,14 @@ class GameScene extends Scene {
       this.anims.create({
           key: 'attack1',
           frames: this.anims.generateFrameNumbers('attack', { start: 0, end: 3 }),
-          frameRate: 20,
+          frameRate: 15,
+          yoyo: false,
+          repeat: 0
+      });
+      this.anims.create({
+          key: 'attack1Left',
+          frames: this.anims.generateFrameNumbers('attackLeft', { start: 3, end: 0 }),
+          frameRate: 15,
           yoyo: false,
           repeat: 0
       });
@@ -357,6 +368,20 @@ class GameScene extends Scene {
           this.attackZone.x = this.player.x;
           this.attackZone.y = this.player.y;
           this.player.anims.play('idle', true);
+        }
+        if(anim.key === 'attack1Left' && frame.index === 3) {
+          console.log("attack left enabled on frame 3");
+          this.physics.world.enable(this.attackZone);
+          this.attackZone.x = this.player.x - 50;
+          this.attackZone.y = this.player.y - 20;
+          this.attackZone.body.height = 50;
+        }
+        if(anim.key === 'attack1Left' && frame.index === 4) {
+          console.log("attack left disabling on frame 4");
+          this.physics.world.disable(this.attackZone);
+          this.attackZone.x = this.player.x;
+          this.attackZone.y = this.player.y;
+          this.player.anims.play('idleLeft', true);
         }
       });
     }
@@ -567,6 +592,12 @@ class GameScene extends Scene {
             this.player.anims.play('attack1', true);
             this.playerAttack = true;
           }
+        } else if (this.cursors.left.isDown && this.cursors.space.isDown) {
+          this.player.setVelocityX(-160);
+          if (this.playerAttack === false) {
+            this.player.anims.play('attack1Left', true);
+            this.playerAttack = true;
+          }
         } else if (this.cursors.right.isDown) {
           this.player.setVelocityX(160);
           this.player.anims.play('moveRight', true);
@@ -574,9 +605,17 @@ class GameScene extends Scene {
           this.player.setVelocityX(-160);
           this.player.anims.play('moveLeft', true);
         } else if (this.cursors.space.isDown && this.playerAttack === false) {
-          this.player.anims.play('attack1', true);
-          this.playerAttack = true;
-          // console.log("attacking");
+
+          if (this.player.anims.currentAnim.key === 'idle') {
+            this.player.anims.play('attack1', true);
+            this.playerAttack = true;
+            // console.log("attacking");
+          } if (this.player.anims.currentAnim.key === 'idleLeft') {
+            this.player.anims.play('attack1Left', true);
+            this.playerAttack = true;
+            // console.log("attacking");
+          }
+
         } else {
           // Play appropriate idle animation based on the previous movement
           if (this.player.body.velocity.x > 0) {
