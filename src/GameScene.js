@@ -86,6 +86,16 @@ class GameScene extends Scene {
       { frameWidth: 200, frameHeight: 123 }
     );
 
+    this.load.spritesheet('attack3',
+      'assets/enemy2/attack3.png',
+      { frameWidth: 200, frameHeight: 123 }
+    );
+
+    this.load.spritesheet('attack3Left',
+      'assets/enemy2/attack3Left.png',
+      { frameWidth: 200, frameHeight: 123 }
+    );
+
     // shard
     this.load.spritesheet('shardSheet',
       'assets/CrystaFragments.png',
@@ -164,6 +174,8 @@ class GameScene extends Scene {
 
       this.createAnimationUpdate();
 
+      this.createAnimationUpdate2();
+
       // Set a delay before starting the enemy's movement (in milliseconds)
       const delayBeforeMovement = 1000; // 1 second delay
 
@@ -183,6 +195,7 @@ class GameScene extends Scene {
 
       this.isEnemy2Running = false;
       this.playerAttack = false;
+      this.enemy2Attack = false;
 
       camera.startFollow(this.player);
 
@@ -282,13 +295,17 @@ class GameScene extends Scene {
     }
 
     createEnemy2() {
-      this.enemy2 = this.physics.add.sprite(700, 0, 'enemy2');
+      this.enemy2 = this.physics.add.sprite(1000, 0, 'enemy2');
       this.enemy2.setScale(1.3);
       this.enemy2.setBounce(0.2);
       this.enemy2.setSize(10, 10, true);
-      this.enemy2.setOffset(67, 100);
+      this.enemy2.setOffset(100, 100);
       // this.enemy2.enableBody = true;
       // this.enemy2.body.velocity.x = 80;
+      this.enemy2.setCollideWorldBounds(true);
+      this.enemy2.body.onWorldBounds=true;
+
+      this.attackZone2 = this.add.zone(this.enemy2.x, this.enemy2.y, 40, 40);
 
 
       this.anims.create({
@@ -310,6 +327,20 @@ class GameScene extends Scene {
         frames: this.anims.generateFrameNumbers('enemy2RunLeft', { start: 7, end: 0 }),
         frameRate: 10,
         repeat: -1
+      })
+
+      this.anims.create({
+        key: 'attack3',
+        frames: this.anims.generateFrameNumbers('attack3', { start: 0, end: 3 }),
+        frameRate: 10,
+        repeat: 0
+      })
+
+      this.anims.create({
+        key: 'attack3Left',
+        frames: this.anims.generateFrameNumbers('attack3Left', { start: 3, end: 0 }),
+        frameRate: 10,
+        repeat: 0
       })
 
       this.physics.add.overlap(this.attackZone, this.enemy2, this.killEnemy2, null, this);
@@ -382,6 +413,39 @@ class GameScene extends Scene {
           this.attackZone.x = this.player.x;
           this.attackZone.y = this.player.y;
           this.player.anims.play('idleLeft', true);
+        }
+      });
+    }
+
+    createAnimationUpdate2() {
+      this.enemy2.on('animationupdate', (anim, frame, sprite, frameKey) => {
+        if(anim.key === 'attack3Left' && frame.index === 3) {
+          console.log("attack enemy2 enabled on frame 3");
+          this.physics.world.enable(this.attackZone2);
+          this.attackZone2.x = this.enemy2.x - 50;
+          this.attackZone2.y = this.enemy2.y + 30;
+          this.attackZone2.body.height = 50;
+        }
+        if(anim.key === 'attack3Left' && frame.index === 4) {
+          console.log("attack disabling on frame 4");
+          this.physics.world.disable(this.attackZone2);
+          this.attackZone2.x = this.enemy2.x;
+          this.attackZone2.y = this.enemy2.y;
+          this.enemy2.anims.play('enemy2', true);
+        }
+        if(anim.key === 'attack3' && frame.index === 3) {
+          console.log("attack left enabled on frame 3");
+          this.physics.world.enable(this.attackZone2);
+          this.attackZone2.x = this.enemy2.x + 50;
+          this.attackZone2.y = this.enemy2.y + 30;
+          this.attackZone2.body.height = 50;
+        }
+        if(anim.key === 'attack3' && frame.index === 4) {
+          console.log("attack left disabling on frame 4");
+          this.physics.world.disable(this.attackZone2);
+          this.attackZone2.x = this.enemy2.x;
+          this.attackZone2.y = this.enemy2.y;
+          this.enemy2.anims.play('enemy2', true);
         }
       });
     }
@@ -558,6 +622,20 @@ class GameScene extends Scene {
       this.enemy2.destroy(); // Destroy the enemy
     }
 
+    killPlayer(player, enemy2) {
+      console.log(player);
+      this.tweens.killTweensOf(this.player);
+      this.player.anims.stop(); // Stop the animation
+      this.player.destroy(); // Destroy the enemy
+
+      this.gameOver = true;
+      this.gameWinText.visible = true;
+      this.input.on('pointerdown', () => {
+        this.scene.start('preload');
+        this.gameOver = false;
+      });
+    }
+
     collectShard(player, star) {
       this.score += 1;
       star.disableBody(true, true);
@@ -573,6 +651,9 @@ class GameScene extends Scene {
     ////////////////////////////////////////////////////////////////// update
     update(time, delta) {
       this.controls.update(delta);
+
+      this.physics.add.overlap(this.attackZone2, this.player, this.killPlayer, null, this);
+
       if (this.enemy.anims) {
         this.enemy.anims.play('idleEnemy', true);
       }
@@ -650,17 +731,54 @@ class GameScene extends Scene {
           let normalizedX = distanceX / length;
           let normalizedY = distanceY / length;
           this.enemy2.setVelocityX(normalizedX * speed);
-          this.enemy2.setVelocityY(normalizedY * speed);
+          // this.enemy2.setVelocityY(normalizedY * speed);
 
           // Check if enemy too far
 
           if (length > 199) {
             this.enemy2.setVelocityX(0);
             this.enemy2.setVelocityY(0);
+            this.enemy2.anims.play('enemy2', true);
           }
 
-          // Check if enemy is moving left
-          if (normalizedX < 0) {
+          if (length < 100 && normalizedX < 0 && !this.enemy2Attack) {
+            this.enemy2.anims.play('attack3Left', true);
+
+            const delayBeforeNextAttack1 = 700; // 1 second delay
+            // Schedule a callback function after the delay
+            this.time.delayedCall(delayBeforeNextAttack1, () => {
+                // Code to execute after the delay
+                this.enemy2Attack = true; // Resetting attack flag for next attack
+                console.log(this.enemy2Attack);
+            }, [], this);
+
+            const delayBeforeNextAttack = 3000; // 1 second delay
+            // Schedule a callback function after the delay
+            this.time.delayedCall(delayBeforeNextAttack, () => {
+                // Code to execute after the delay
+                this.enemy2Attack = false; // Resetting attack flag for next attack
+            }, [], this);
+
+            // console.log('attacking');
+          } else if (length < 100 && normalizedX > 0 && !this.enemy2Attack) {
+            this.enemy2.anims.play('attack3', true);
+
+            const delayBeforeNextAttack1 = 700; // 1 second delay
+            // Schedule a callback function after the delay
+            this.time.delayedCall(delayBeforeNextAttack1, () => {
+                // Code to execute after the delay
+                this.enemy2Attack = true; // Resetting attack flag for next attack
+            }, [], this);
+
+            const delayBeforeNextAttack = 3000; // 1 second delay
+            // Schedule a callback function after the delay
+            this.time.delayedCall(delayBeforeNextAttack, () => {
+                // Code to execute after the delay
+                this.enemy2Attack = false; // Resetting attack flag for next attack
+            }, [], this);
+
+            // console.log('attacking');
+          } else if (normalizedX < 0) {
               // this.setEnemy2Animation(true)
               // console.log('Is animation playing:', this.enemy2.anims.isPlaying);
               this.enemy2.anims.play('enemy2RunLeft', true);
