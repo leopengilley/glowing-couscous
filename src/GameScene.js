@@ -102,12 +102,21 @@ class GameScene extends Scene {
       { frameWidth: 200, frameHeight: 256 }
     );
 
+    // // boss
+    // this.load.spritesheet('bossIdle',
+    //   'assets/boss/bossIdle.png',
+    //   { frameWidth: 146, frameHeight: 256 }
+    // );
+
     // boss
     this.load.spritesheet('bossIdle',
-      'assets/boss/bossIdle.png',
-      { frameWidth: 146, frameHeight: 256 }
+      'assets/boss2/boss2.png',
+      { frameWidth: 80, frameHeight: 54 }
     );
+
   }
+
+
 
     create() {
 
@@ -178,11 +187,11 @@ class GameScene extends Scene {
       this.physics.add.collider(this.enemy2, backgroundH);
       this.physics.add.collider(this.enemy2, backgroundI);
 
-      // this.createBoss();
-      // this.physics.add.collider(this.boss, backgroundG);
-      // this.physics.add.collider(this.boss, backgroundD);
-      // this.physics.add.collider(this.boss, backgroundH);
-      // this.physics.add.collider(this.boss, backgroundI);
+      this.createBoss();
+      this.physics.add.collider(this.boss, backgroundG);
+      this.physics.add.collider(this.boss, backgroundD);
+      this.physics.add.collider(this.boss, backgroundH);
+      this.physics.add.collider(this.boss, backgroundI);
 
       this.createAnimationUpdate();
 
@@ -549,24 +558,24 @@ class GameScene extends Scene {
     }
 
     createBoss() {
-      this.boss = this.physics.add.sprite(500, 0, 'bossIdleFirstAxis');
-      this.boss.setScale(0.7);
+      this.boss = this.physics.add.sprite(1900, 0, 'bossIdle');
+      this.boss.setScale(1.5);
       this.boss.setBounce(0.2);
       this.boss.setSize(10, 10, true);
-      this.boss.setOffset(100, 100);
+      this.boss.setOffset(25, 30);
       // this.enemy2.enableBody = true;
       // this.enemy2.body.velocity.x = 80;
-      // this.boss.setCollideWorldBounds(true);
-      // this.boss.body.onWorldBounds=true;
+      this.boss.setCollideWorldBounds(true);
+      this.boss.body.onWorldBounds=true;
 
       // this.attackZone2 = this.add.zone(this.enemy2.x, this.enemy2.y, 40, 40);
 
 
       // Define frames for both y-axis
       this.anims.create({
-          key: 'bossIdleFirstAxis',
-          frames: this.anims.generateFrameNumbers('bossIdle', { start: 0, end: 10 }),
-          frameRate: 20,
+          key: 'bossIdle',
+          frames: this.anims.generateFrameNumbers('bossIdle', { start: 0, end: 8 }),
+          frameRate: 15,
           repeat: -1 // or the desired number of repeats
       });
 
@@ -577,7 +586,7 @@ class GameScene extends Scene {
       //     repeat: -1 // or the desired number of repeats
 
       // this.physics.add.overlap(this.attackZone, this.enemy2, this.killEnemy2, null, this);
-      this.boss.anims.play('bossIdleFirstAxis', true);
+      this.boss.anims.play('bossIdle', true);
     }
 
     // moveEnemy() {
@@ -673,7 +682,7 @@ class GameScene extends Scene {
       this.player.destroy(); // Destroy the enemy
 
       this.gameOver = true;
-      this.gameWinText.visible = true;
+      this.gameOverText.visible = true;
       this.input.on('pointerdown', () => {
         this.scene.start('preload');
         this.gameOver = false;
