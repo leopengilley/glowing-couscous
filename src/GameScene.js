@@ -178,11 +178,11 @@ class GameScene extends Scene {
       this.physics.add.collider(this.enemy2, backgroundH);
       this.physics.add.collider(this.enemy2, backgroundI);
 
-      this.createBoss();
-      this.physics.add.collider(this.boss, backgroundG);
-      this.physics.add.collider(this.boss, backgroundD);
-      this.physics.add.collider(this.boss, backgroundH);
-      this.physics.add.collider(this.boss, backgroundI);
+      // this.createBoss();
+      // this.physics.add.collider(this.boss, backgroundG);
+      // this.physics.add.collider(this.boss, backgroundD);
+      // this.physics.add.collider(this.boss, backgroundH);
+      // this.physics.add.collider(this.boss, backgroundI);
 
       this.createAnimationUpdate();
 
