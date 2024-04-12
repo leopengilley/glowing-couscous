@@ -101,6 +101,12 @@ class GameScene extends Scene {
       'assets/CrystaFragments.png',
       { frameWidth: 200, frameHeight: 256 }
     );
+
+    // boss
+    this.load.spritesheet('bossIdle',
+      'assets/boss/bossIdle.png',
+      { frameWidth: 146, frameHeight: 256 }
+    );
   }
 
     create() {
@@ -171,6 +177,12 @@ class GameScene extends Scene {
       this.physics.add.collider(this.enemy2, backgroundD);
       this.physics.add.collider(this.enemy2, backgroundH);
       this.physics.add.collider(this.enemy2, backgroundI);
+
+      this.createBoss();
+      this.physics.add.collider(this.boss, backgroundG);
+      this.physics.add.collider(this.boss, backgroundD);
+      this.physics.add.collider(this.boss, backgroundH);
+      this.physics.add.collider(this.boss, backgroundI);
 
       this.createAnimationUpdate();
 
@@ -534,6 +546,38 @@ class GameScene extends Scene {
       // // Initial call to start moving the character
       // moveCharacter();
 
+    }
+
+    createBoss() {
+      this.boss = this.physics.add.sprite(500, 0, 'bossIdleFirstAxis');
+      this.boss.setScale(0.7);
+      this.boss.setBounce(0.2);
+      this.boss.setSize(10, 10, true);
+      this.boss.setOffset(100, 100);
+      // this.enemy2.enableBody = true;
+      // this.enemy2.body.velocity.x = 80;
+      // this.boss.setCollideWorldBounds(true);
+      // this.boss.body.onWorldBounds=true;
+
+      // this.attackZone2 = this.add.zone(this.enemy2.x, this.enemy2.y, 40, 40);
+
+
+      // Define frames for both y-axis
+      this.anims.create({
+          key: 'bossIdleFirstAxis',
+          frames: this.anims.generateFrameNumbers('bossIdle', { start: 0, end: 10 }),
+          frameRate: 20,
+          repeat: -1 // or the desired number of repeats
+      });
+
+      // this.anims.create({
+      //     key: 'bossIdleSecondAxis',
+      //     frames: this.anims.generateFrameNumbers('bossIdle', { start: 2, end: 12 }),
+      //     frameRate: 20,
+      //     repeat: -1 // or the desired number of repeats
+
+      // this.physics.add.overlap(this.attackZone, this.enemy2, this.killEnemy2, null, this);
+      this.boss.anims.play('bossIdleFirstAxis', true);
     }
 
     // moveEnemy() {
