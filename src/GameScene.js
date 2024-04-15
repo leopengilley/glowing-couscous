@@ -1,5 +1,6 @@
 import { Scene } from 'phaser';
 import { config } from './config';
+import Boss from './Boss.js';
 
 class GameScene extends Scene {
 
@@ -114,6 +115,25 @@ class GameScene extends Scene {
       { frameWidth: 80, frameHeight: 54 }
     );
 
+    this.load.spritesheet('bossRunRight',
+      'assets/boss2/bossRunRight.png',
+      { frameWidth: 80, frameHeight: 54 }
+    );
+
+    this.load.spritesheet('bossRunLeft',
+      'assets/boss2/bossRunLeft.png',
+      { frameWidth: 80, frameHeight: 54 }
+    );
+
+    this.load.spritesheet('bossAttackLeft',
+      'assets/boss2/bossAttackLeft.png',
+      { frameWidth: 80, frameHeight: 73 }
+    );
+
+    this.load.spritesheet('bossAttackLeft',
+      'assets/boss2/bossAttackLeft.png',
+      { frameWidth: 80, frameHeight: 73 }
+    );
   }
 
 
@@ -187,7 +207,7 @@ class GameScene extends Scene {
       this.physics.add.collider(this.enemy2, backgroundH);
       this.physics.add.collider(this.enemy2, backgroundI);
 
-      this.createBoss();
+      this.createBoss(400, 0);
       this.physics.add.collider(this.boss, backgroundG);
       this.physics.add.collider(this.boss, backgroundD);
       this.physics.add.collider(this.boss, backgroundH);
@@ -217,6 +237,7 @@ class GameScene extends Scene {
       this.isEnemy2Running = false;
       this.playerAttack = false;
       this.enemy2Attack = false;
+      this.bossAttack = false;
 
       camera.startFollow(this.player);
 
@@ -557,13 +578,17 @@ class GameScene extends Scene {
 
     }
 
-    createBoss() {
-      this.boss = this.physics.add.sprite(1900, 0, 'bossIdle');
+    createBoss(x, y) {
+      // this.boss = new Boss(this, x, y, this.player);
+      this.boss = this.physics.add.sprite(400, 0, 'bossIdle');
+      // 1900
+      this.physics.add.existing(this.boss);
+
       this.boss.setScale(1.5);
       this.boss.setBounce(0.2);
       this.boss.setSize(10, 10, true);
       this.boss.setOffset(25, 30);
-      // this.enemy2.enableBody = true;
+      this.boss.enableBody = true;
       // this.enemy2.body.velocity.x = 80;
       this.boss.setCollideWorldBounds(true);
       this.boss.body.onWorldBounds=true;
@@ -579,15 +604,37 @@ class GameScene extends Scene {
           repeat: -1 // or the desired number of repeats
       });
 
-      // this.anims.create({
-      //     key: 'bossIdleSecondAxis',
-      //     frames: this.anims.generateFrameNumbers('bossIdle', { start: 2, end: 12 }),
-      //     frameRate: 20,
-      //     repeat: -1 // or the desired number of repeats
+      this.anims.create({
+          key: 'bossRunRight',
+          frames: this.anims.generateFrameNumbers('bossRunRight', { start: 0, end: 5 }),
+          frameRate: 15,
+          repeat: -1 // or the desired number of repeats
+      });
 
+      this.anims.create({
+          key: 'bossRunLeft',
+          frames: this.anims.generateFrameNumbers('bossRunLeft', { start: 5, end: 0 }),
+          frameRate: 15,
+          repeat: -1 // or the desired number of repeats
+      });
+
+      this.anims.create({
+          key: 'bossAttackLeft',
+          frames: this.anims.generateFrameNumbers('bossAttackLeft', { start: 0, end: 11 }),
+          frameRate: 15,
+          repeat: -1 // or the desired number of repeats
+      });
+
+      this.anims.create({
+          key: 'bossAttackRight',
+          frames: this.anims.generateFrameNumbers('bossAttackRight', { start: 11, end: 0 }),
+          frameRate: 15,
+          repeat: -1 // or the desired number of repeats
+      });
       // this.physics.add.overlap(this.attackZone, this.enemy2, this.killEnemy2, null, this);
       this.boss.anims.play('bossIdle', true);
     }
+
 
     // moveEnemy() {
     //   // Create a timeline tween for horizontal movement
