@@ -579,8 +579,8 @@ class GameScene extends Scene {
     }
 
     createBoss(x, y) {
-      // this.boss = new Boss(this, x, y, this.player);
-      this.boss = this.physics.add.sprite(400, 0, 'bossIdle');
+      this.boss = new Boss(this, x, y, this.player, 'bossIdle');
+      // this.boss = this.physics.add.sprite(400, 0, 'bossIdle');
       // 1900
       this.physics.add.existing(this.boss);
 

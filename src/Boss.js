@@ -1,16 +1,18 @@
 export default class Boss extends Phaser.GameObjects.Sprite {
-    constructor(scene, x, y, player) {
-        super(scene, x, y, 'boss'); // 'enemy1' is the texture key
+    constructor(scene, x, y, player, texture) {
+        super(scene, x, y, texture);
         scene.add.existing(this);
         this.player = player; // Store reference to the player object
         // Initialize any properties specific to Enemy1
     }
 
-    update() {
+    update(time, delta) {
+        super.update(time, delta);
         // Update logic specific to Enemy1
-
+        console.log("sheet 2");
         if (this.player) {
           // Update boss movement to follow the player
+
           let speed = 100;
           let distanceX = this.player.x - this.x;
           let distanceY = this.player.y - this.y;
