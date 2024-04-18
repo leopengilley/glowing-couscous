@@ -207,11 +207,7 @@ class GameScene extends Scene {
       this.physics.add.collider(this.enemy2, backgroundH);
       this.physics.add.collider(this.enemy2, backgroundI);
 
-      this.createBoss(400, 0);
-      this.physics.add.collider(this.boss, backgroundG);
-      this.physics.add.collider(this.boss, backgroundD);
-      this.physics.add.collider(this.boss, backgroundH);
-      this.physics.add.collider(this.boss, backgroundI);
+      this.createBoss(400, 300);
 
       this.createAnimationUpdate();
 
@@ -461,7 +457,7 @@ class GameScene extends Scene {
 
     createAnimationUpdate2() {
       this.enemy2.on('animationupdate', (anim, frame, sprite, frameKey) => {
-        if(anim.key === 'attack3Left' && frame.index === 3) {
+        if(anim.key === 'attack3Left' && frame.index === 1) {
           console.log("attack enemy2 enabled on frame 3");
           this.physics.world.enable(this.attackZone2);
           this.attackZone2.x = this.enemy2.x - 50;
@@ -579,60 +575,72 @@ class GameScene extends Scene {
     }
 
     createBoss(x, y) {
-      this.boss = new Boss(this, x, y, this.player, 'bossIdle');
+
+      // const boss = new Boss(this, x, y, this.player, 'bossIdle'); // Assuming 'bossIdle' is the texture key
+      // Add the boss to the scene
+      // this.add.existing(boss);
+      const boss = this.add.boss(x, y)
+    //   const boss = this.add.boss(400, 300, this.player, 'bossIdle')
+      // const boss = new Boss(this, x, y, this.player, 'bossIdle');
+      // this.add.existing(boss)
+
       // this.boss = this.physics.add.sprite(400, 0, 'bossIdle');
       // 1900
-      this.physics.add.existing(this.boss);
-
-      this.boss.setScale(1.5);
-      this.boss.setBounce(0.2);
-      this.boss.setSize(10, 10, true);
-      this.boss.setOffset(25, 30);
-      this.boss.enableBody = true;
-      // this.enemy2.body.velocity.x = 80;
-      this.boss.setCollideWorldBounds(true);
-      this.boss.body.onWorldBounds=true;
-
-      // this.attackZone2 = this.add.zone(this.enemy2.x, this.enemy2.y, 40, 40);
-
-
-      // Define frames for both y-axis
+      this.physics.add.existing(boss);
+      this.physics.add.collider(boss, this.backgroundG);
+      this.physics.add.collider(boss, this.backgroundD);
+      this.physics.add.collider(boss, this.backgroundH);
+      this.physics.add.collider(boss, this.backgroundI);
+      //
+      // boss.setScale(1.5);
+      // boss.setBounce(0.2);
+      // boss.setSize(10, 10, true);
+      // boss.setOffset(25, 30);
+      // boss.enableBody = true;
+      // // // this.enemy2.body.velocity.x = 80;
+      // boss.setCollideWorldBounds(true);
+      // boss.body.onWorldBounds=true;
+      //
+      // // this.attackZone2 = this.add.zone(this.enemy2.x, this.enemy2.y, 40, 40);
+      //
+      //
+      // // Define frames for both y-axis
       this.anims.create({
           key: 'bossIdle',
           frames: this.anims.generateFrameNumbers('bossIdle', { start: 0, end: 8 }),
           frameRate: 15,
           repeat: -1 // or the desired number of repeats
       });
-
-      this.anims.create({
-          key: 'bossRunRight',
-          frames: this.anims.generateFrameNumbers('bossRunRight', { start: 0, end: 5 }),
-          frameRate: 15,
-          repeat: -1 // or the desired number of repeats
-      });
-
-      this.anims.create({
-          key: 'bossRunLeft',
-          frames: this.anims.generateFrameNumbers('bossRunLeft', { start: 5, end: 0 }),
-          frameRate: 15,
-          repeat: -1 // or the desired number of repeats
-      });
-
-      this.anims.create({
-          key: 'bossAttackLeft',
-          frames: this.anims.generateFrameNumbers('bossAttackLeft', { start: 0, end: 11 }),
-          frameRate: 15,
-          repeat: -1 // or the desired number of repeats
-      });
-
-      this.anims.create({
-          key: 'bossAttackRight',
-          frames: this.anims.generateFrameNumbers('bossAttackRight', { start: 11, end: 0 }),
-          frameRate: 15,
-          repeat: -1 // or the desired number of repeats
-      });
-      // this.physics.add.overlap(this.attackZone, this.enemy2, this.killEnemy2, null, this);
-      this.boss.anims.play('bossIdle', true);
+      //
+      // this.anims.create({
+      //     key: 'bossRunRight',
+      //     frames: this.anims.generateFrameNumbers('bossRunRight', { start: 0, end: 5 }),
+      //     frameRate: 15,
+      //     repeat: -1 // or the desired number of repeats
+      // });
+      //
+      // this.anims.create({
+      //     key: 'bossRunLeft',
+      //     frames: this.anims.generateFrameNumbers('bossRunLeft', { start: 5, end: 0 }),
+      //     frameRate: 15,
+      //     repeat: -1 // or the desired number of repeats
+      // });
+      //
+      // this.anims.create({
+      //     key: 'bossAttackLeft',
+      //     frames: this.anims.generateFrameNumbers('bossAttackLeft', { start: 0, end: 11 }),
+      //     frameRate: 15,
+      //     repeat: -1 // or the desired number of repeats
+      // });
+      //
+      // this.anims.create({
+      //     key: 'bossAttackRight',
+      //     frames: this.anims.generateFrameNumbers('bossAttackRight', { start: 11, end: 0 }),
+      //     frameRate: 15,
+      //     repeat: -1 // or the desired number of repeats
+      // });
+      // // this.physics.add.overlap(this.attackZone, this.enemy2, this.killEnemy2, null, this);
+      boss.anims.play('bossIdle', true);
     }
 
 
