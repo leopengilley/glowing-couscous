@@ -576,29 +576,31 @@ class GameScene extends Scene {
 
     createBoss(x, y) {
 
-      // const boss = new Boss(this, x, y, this.player, 'bossIdle'); // Assuming 'bossIdle' is the texture key
+      let boss = new Boss(this, x, y, this.player, 'bossIdle'); // Assuming 'bossIdle' is the texture key
       // Add the boss to the scene
-      // this.add.existing(boss);
-      const boss = this.add.boss(x, y)
+      this.add.existing(boss);
+      // let boss = this.add.boss(x, y)
     //   const boss = this.add.boss(400, 300, this.player, 'bossIdle')
       // const boss = new Boss(this, x, y, this.player, 'bossIdle');
       // this.add.existing(boss)
+      // this.anims.play('bossIdle', true);
 
       // this.boss = this.physics.add.sprite(400, 0, 'bossIdle');
       // 1900
-      this.physics.add.existing(boss);
+      // this.physics.add.existing(boss);
+
+      //
+      boss.setScale(1.5);
+      boss.setBounce(0.2);
+      boss.setSize(10, 10, true);
+      boss.setOffset(25, 30);
+      boss.enableBody = true;
+      // // // this.enemy2.body.velocity.x = 80;
+      boss.setCollideWorldBounds(true);
       this.physics.add.collider(boss, this.backgroundG);
       this.physics.add.collider(boss, this.backgroundD);
       this.physics.add.collider(boss, this.backgroundH);
       this.physics.add.collider(boss, this.backgroundI);
-      //
-      // boss.setScale(1.5);
-      // boss.setBounce(0.2);
-      // boss.setSize(10, 10, true);
-      // boss.setOffset(25, 30);
-      // boss.enableBody = true;
-      // // // this.enemy2.body.velocity.x = 80;
-      // boss.setCollideWorldBounds(true);
       // boss.body.onWorldBounds=true;
       //
       // // this.attackZone2 = this.add.zone(this.enemy2.x, this.enemy2.y, 40, 40);
@@ -607,10 +609,13 @@ class GameScene extends Scene {
       // // Define frames for both y-axis
       this.anims.create({
           key: 'bossIdle',
-          frames: this.anims.generateFrameNumbers('bossIdle', { start: 0, end: 8 }),
+          frames: this.anims.generateFrameNumbers('bossIdle', { start: 0, end: 7 }),
           frameRate: 15,
           repeat: -1 // or the desired number of repeats
       });
+
+      boss.play('bossIdle')
+
       //
       // this.anims.create({
       //     key: 'bossRunRight',
@@ -640,7 +645,6 @@ class GameScene extends Scene {
       //     repeat: -1 // or the desired number of repeats
       // });
       // // this.physics.add.overlap(this.attackZone, this.enemy2, this.killEnemy2, null, this);
-      boss.anims.play('bossIdle', true);
     }
 
 
