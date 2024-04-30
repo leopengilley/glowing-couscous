@@ -130,8 +130,8 @@ class GameScene extends Scene {
       { frameWidth: 80, frameHeight: 73 }
     );
 
-    this.load.spritesheet('bossAttackLeft',
-      'assets/boss2/bossAttackLeft.png',
+    this.load.spritesheet('bossAttackRight',
+      'assets/boss2/bossAttackRight.png',
       { frameWidth: 80, frameHeight: 73 }
     );
   }
@@ -576,7 +576,8 @@ class GameScene extends Scene {
 
     createBoss(x, y, bg1, bg2, bg3, bg4) {
 
-      let boss = new Boss(this, x, y, this.player, 'bossIdle', bg1, bg2, bg3, bg4); // Assuming 'bossIdle' is the texture key
+      let boss = new Boss(this, x, y, this.player, 'bossIdle', 'bossRunLeft',
+      'bossRunRight', 'bossAttackLeft', 'bossAttackRight', bg1, bg2, bg3, bg4, this.time); // Assuming 'bossIdle' is the texture key
       // Add the boss to the scene
       this.add.existing(boss);
       // let boss = this.add.boss(x, y)
@@ -614,35 +615,36 @@ class GameScene extends Scene {
 
       boss.play('bossIdle')
 
-      //
-      // this.anims.create({
-      //     key: 'bossRunRight',
-      //     frames: this.anims.generateFrameNumbers('bossRunRight', { start: 0, end: 5 }),
-      //     frameRate: 15,
-      //     repeat: -1 // or the desired number of repeats
-      // });
-      //
-      // this.anims.create({
-      //     key: 'bossRunLeft',
-      //     frames: this.anims.generateFrameNumbers('bossRunLeft', { start: 5, end: 0 }),
-      //     frameRate: 15,
-      //     repeat: -1 // or the desired number of repeats
-      // });
-      //
-      // this.anims.create({
-      //     key: 'bossAttackLeft',
-      //     frames: this.anims.generateFrameNumbers('bossAttackLeft', { start: 0, end: 11 }),
-      //     frameRate: 15,
-      //     repeat: -1 // or the desired number of repeats
-      // });
-      //
-      // this.anims.create({
-      //     key: 'bossAttackRight',
-      //     frames: this.anims.generateFrameNumbers('bossAttackRight', { start: 11, end: 0 }),
-      //     frameRate: 15,
-      //     repeat: -1 // or the desired number of repeats
-      // });
-      // // this.physics.add.overlap(this.attackZone, this.enemy2, this.killEnemy2, null, this);
+
+      this.anims.create({
+          key: 'bossRunRight',
+          frames: this.anims.generateFrameNumbers('bossRunRight', { start: 0, end: 5 }),
+          frameRate: 15,
+          repeat: -1 // or the desired number of repeats
+      });
+
+      this.anims.create({
+          key: 'bossRunLeft',
+          frames: this.anims.generateFrameNumbers('bossRunLeft', { start: 5, end: 0 }),
+          frameRate: 15,
+          repeat: -1 // or the desired number of repeats
+      });
+
+      this.anims.create({
+          key: 'bossAttackLeft',
+          frames: this.anims.generateFrameNumbers('bossAttackLeft', { start: 0, end: 11 }),
+          frameRate: 15,
+          repeat: -1 // or the desired number of repeats
+      });
+
+      this.anims.create({
+          key: 'bossAttackRight',
+          frames: this.anims.generateFrameNumbers('bossAttackRight', { start: 11, end: 0 }),
+          frameRate: 1,
+          repeat: -1 // or the desired number of repeats
+      });
+
+      // this.physics.add.overlap(this.attackZone, this.enemy2, this.killEnemy2, null, this);
     }
 
 
