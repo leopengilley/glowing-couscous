@@ -1,15 +1,20 @@
 import Phaser from 'phaser'
 
 export default class Boss extends Phaser.Physics.Arcade.Sprite {
-    constructor(scene, x, y, player, texture) {
+    constructor(scene, x, y, player, texture, bg1, bg2, bg3, bg4) {
         super(scene, x, y);
         scene.add.existing(this);
         scene.physics.add.existing(this);
         this.setTexture(texture)
         this.player = player; // Store reference to the player object
         // Initialize any properties specific to Enemy1
-        // this.setCollideWorldBounds(true);
+        this.setCollideWorldBounds(true);
+        scene.physics.add.collider(this, bg1);
+        scene.physics.add.collider(this, bg2);
+        scene.physics.add.collider(this, bg3);
+        scene.physics.add.collider(this, bg4);
 
+        console.log(bg1);
     }
   // }
 

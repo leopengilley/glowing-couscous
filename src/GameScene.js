@@ -207,7 +207,7 @@ class GameScene extends Scene {
       this.physics.add.collider(this.enemy2, backgroundH);
       this.physics.add.collider(this.enemy2, backgroundI);
 
-      this.createBoss(400, 300);
+      this.createBoss(400, 300, backgroundG, backgroundD, backgroundH, backgroundI);
 
       this.createAnimationUpdate();
 
@@ -574,9 +574,9 @@ class GameScene extends Scene {
 
     }
 
-    createBoss(x, y) {
+    createBoss(x, y, bg1, bg2, bg3, bg4) {
 
-      let boss = new Boss(this, x, y, this.player, 'bossIdle'); // Assuming 'bossIdle' is the texture key
+      let boss = new Boss(this, x, y, this.player, 'bossIdle', bg1, bg2, bg3, bg4); // Assuming 'bossIdle' is the texture key
       // Add the boss to the scene
       this.add.existing(boss);
       // let boss = this.add.boss(x, y)
@@ -586,21 +586,19 @@ class GameScene extends Scene {
       // this.anims.play('bossIdle', true);
 
       // this.boss = this.physics.add.sprite(400, 0, 'bossIdle');
-      // 1900
-      // this.physics.add.existing(boss);
 
-      //
+
       boss.setScale(1.5);
       boss.setBounce(0.2);
       boss.setSize(10, 10, true);
       boss.setOffset(25, 30);
       boss.enableBody = true;
-      // // // this.enemy2.body.velocity.x = 80;
-      boss.setCollideWorldBounds(true);
-      this.physics.add.collider(boss, this.backgroundG);
-      this.physics.add.collider(boss, this.backgroundD);
-      this.physics.add.collider(boss, this.backgroundH);
-      this.physics.add.collider(boss, this.backgroundI);
+       // this.enemy2.body.velocity.x = 80;
+      // boss.setCollideWorldBounds(true);
+      // this.physics.add.collider(boss, this.backgroundG);
+      // this.physics.add.collider(boss, this.backgroundD);
+      // this.physics.add.collider(boss, this.backgroundH);
+      // this.physics.add.collider(boss, this.backgroundI);
       // boss.body.onWorldBounds=true;
       //
       // // this.attackZone2 = this.add.zone(this.enemy2.x, this.enemy2.y, 40, 40);
