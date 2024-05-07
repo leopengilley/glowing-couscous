@@ -58,6 +58,7 @@ export default class Boss extends Phaser.Physics.Arcade.Sprite {
 
               if (length < 100 && normalizedX < 0 && !this.bossAttack) {
                 this.anims.play('bossAttackLeft', true);
+                console.log('attacking left');
 
                 const delayBeforeNextAttack1 = 700; // 1 second delay
                 // Schedule a callback function after the delay
@@ -77,6 +78,7 @@ export default class Boss extends Phaser.Physics.Arcade.Sprite {
                 // console.log('attacking');
               } else if (length < 100 && normalizedX > 0 && !this.bossAttack) {
                 this.anims.play('bossAttackRight', true);
+                console.log('attacking right');
 
                 const delayBeforeNextAttack1 = 700; // 1 second delay
                 // Schedule a callback function after the delay

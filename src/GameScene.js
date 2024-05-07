@@ -111,18 +111,18 @@ class GameScene extends Scene {
 
     // boss
     this.load.spritesheet('bossIdle',
-      'assets/boss2/boss2.png',
-      { frameWidth: 80, frameHeight: 54 }
+      'assets/boss2/boos.png',
+      { frameWidth: 80, frameHeight: 73 }
     );
 
     this.load.spritesheet('bossRunRight',
-      'assets/boss2/bossRunRight.png',
-      { frameWidth: 80, frameHeight: 54 }
+      'assets/boss2/bossRunRight2.png',
+      { frameWidth: 80, frameHeight: 73 }
     );
 
     this.load.spritesheet('bossRunLeft',
-      'assets/boss2/bossRunLeft.png',
-      { frameWidth: 80, frameHeight: 54 }
+      'assets/boss2/bossRunLeft2.png',
+      { frameWidth: 80, frameHeight: 73 }
     );
 
     this.load.spritesheet('bossAttackLeft',
@@ -592,7 +592,7 @@ class GameScene extends Scene {
       boss.setScale(1.5);
       boss.setBounce(0.2);
       boss.setSize(10, 10, true);
-      boss.setOffset(25, 30);
+      boss.setOffset(25, 50);
       boss.enableBody = true;
        // this.enemy2.body.velocity.x = 80;
       // boss.setCollideWorldBounds(true);
@@ -640,7 +640,7 @@ class GameScene extends Scene {
       this.anims.create({
           key: 'bossAttackRight',
           frames: this.anims.generateFrameNumbers('bossAttackRight', { start: 11, end: 0 }),
-          frameRate: 1,
+          frameRate: 15,
           repeat: -1 // or the desired number of repeats
       });
 
