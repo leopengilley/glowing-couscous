@@ -596,13 +596,9 @@ class GameScene extends Scene {
       boss.enableBody = true;
        // this.enemy2.body.velocity.x = 80;
       // boss.setCollideWorldBounds(true);
-      // this.physics.add.collider(boss, this.backgroundG);
-      // this.physics.add.collider(boss, this.backgroundD);
-      // this.physics.add.collider(boss, this.backgroundH);
-      // this.physics.add.collider(boss, this.backgroundI);
       // boss.body.onWorldBounds=true;
       //
-      // // this.attackZone2 = this.add.zone(this.enemy2.x, this.enemy2.y, 40, 40);
+      // this.attackZoneBoss = this.add.zone(boss.x, boss.y, 40, 40);
       //
       //
       // // Define frames for both y-axis
@@ -644,9 +640,11 @@ class GameScene extends Scene {
           repeat: -1 // or the desired number of repeats
       });
 
+      boss.createAnimationUpdateBoss(this);
+
+
       // this.physics.add.overlap(this.attackZone, this.enemy2, this.killEnemy2, null, this);
     }
-
 
     // moveEnemy() {
     //   // Create a timeline tween for horizontal movement

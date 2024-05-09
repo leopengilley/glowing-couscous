@@ -15,9 +15,53 @@ export default class Boss extends Phaser.Physics.Arcade.Sprite {
         scene.physics.add.collider(this, bg3);
         scene.physics.add.collider(this, bg4);
 
+        this.attackZoneBoss = scene.add.zone(this, x, y, 40, 40);
+        scene.physics.world.enable(this.attackZoneBoss);
+        this.attackZoneBoss.x = this.x + 50;
+        this.attackZoneBoss.y = this.y + 20;
+        this.attackZoneBoss.body.height = 50;
+        this.attackZoneBoss.body.width = 50;
+
+
+
         this.time = time;
     }
   // }
+
+
+  createAnimationUpdateBoss(scene) {
+    this.on('animationupdate', (anim, frame, sprite, frameKey) => {
+      if(anim.key === 'bossAttackLeft' && frame.index === 1) {
+        console.log("attack boss enabled on frame 3");
+        scene.physics.world.enable(this.attackZoneBoss);
+        this.attackZoneBoss.x = this.x - 50;
+        this.attackZoneBoss.y = this.y + 90;
+        this.attackZoneBoss.body.height = 50;
+      }
+      if(anim.key === 'bossAttackLeft' && frame.index === 4) {
+        console.log("attack disabling on frame 4");
+        scene.physics.world.disable(this.attackZoneBoss);
+        this.attackZoneBoss.x = this.x;
+        this.attackZoneBoss.y = this.y;
+        this.anims.play('bossIdle', true);
+      }
+      if(anim.key === 'bossAttackRight' && frame.index === 3) {
+        console.log("attack right enabled on frame 3");
+        scene.physics.world.enable(this.attackZoneBoss);
+        this.attackZoneBoss.x = this.x + 50;
+        this.attackZoneBoss.y = this.y + 30;
+        this.attackZoneBoss.body.height = 50;
+      }
+      if(anim.key === 'bossAttackRight' && frame.index === 4) {
+        console.log("attack right disabling on frame 4");
+        scene.physics.world.disable(this.attackZoneBoss);
+        this.attackZoneBoss.x = this.x;
+        this.attackZoneBoss.y = this.y;
+        this.anims.play('bossIdle', true);
+      }
+    });
+  }
+
 
 // Phaser.GameObjects.GameObjectFactory.register('boss', function (x, y, player, texture) {
 //     const boss = new Boss(this.scene, x, y, player, 'bossIdle')
