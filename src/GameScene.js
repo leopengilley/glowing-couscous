@@ -576,7 +576,7 @@ class GameScene extends Scene {
 
     createBoss(x, y, bg1, bg2, bg3, bg4) {
 
-      let boss = new Boss(this, x, y, this.player, 'bossIdle', 'bossRunLeft',
+      let boss = new Boss(this, x, y, this.player, this.attackZone, 'bossIdle', 'bossRunLeft',
       'bossRunRight', 'bossAttackLeft', 'bossAttackRight', bg1, bg2, bg3, bg4, this.time); // Assuming 'bossIdle' is the texture key
       // Add the boss to the scene
       this.add.existing(boss);
@@ -641,9 +641,6 @@ class GameScene extends Scene {
       });
 
       boss.createAnimationUpdateBoss(this);
-
-
-      // this.physics.add.overlap(this.attackZone, this.enemy2, this.killEnemy2, null, this);
     }
 
     // moveEnemy() {

@@ -1,7 +1,7 @@
 import Phaser from 'phaser'
 
 export default class Boss extends Phaser.Physics.Arcade.Sprite {
-    constructor(scene, x, y, player, texture, textRunRight, textureRunLeft,
+    constructor(scene, x, y, player, playerAttackZone, texture, textRunRight, textureRunLeft,
       textureAttackLeft, textureAttackRight, bg1, bg2, bg3, bg4, time) {
         super(scene, x, y);
         scene.add.existing(this);
@@ -15,50 +15,77 @@ export default class Boss extends Phaser.Physics.Arcade.Sprite {
         scene.physics.add.collider(this, bg3);
         scene.physics.add.collider(this, bg4);
 
-        this.attackZoneBoss = scene.add.zone(this, x, y, 40, 40);
-        scene.physics.world.enable(this.attackZoneBoss);
-        this.attackZoneBoss.x = this.x + 50;
-        this.attackZoneBoss.y = this.y + 20;
-        this.attackZoneBoss.body.height = 50;
-        this.attackZoneBoss.body.width = 50;
-
-
+        this.attackZoneBoss = scene.add.zone(this, x, y, this.x, this.y);
+        // scene.physics.world.enable(this.attackZoneBoss);
+        // this.attackZoneBoss.x = this.x + 50;
+        // this.attackZoneBoss.y = this.y;
+        // this.attackZoneBoss.body.height = 50;
+        // this.attackZoneBoss.body.width = 50;
 
         this.time = time;
+        this.scene = scene
+
+
+        scene.physics.add.overlap(playerAttackZone, this, this.killBoss, null, this);
+
+        // this.createAnimationUpdateBoss(this.scene);
+
     }
   // }
 
 
   createAnimationUpdateBoss(scene) {
     this.on('animationupdate', (anim, frame, sprite, frameKey) => {
-      if(anim.key === 'bossAttackLeft' && frame.index === 1) {
+      if(anim.key === 'bossAttackLeft' && frame.index === 2) {
         console.log("attack boss enabled on frame 3");
         scene.physics.world.enable(this.attackZoneBoss);
-        this.attackZoneBoss.x = this.x - 50;
-        this.attackZoneBoss.y = this.y + 90;
+        this.attackZoneBoss.x = this.x + 50;
+        this.attackZoneBoss.y = this.y + 200;
         this.attackZoneBoss.body.height = 50;
+        this.attackZoneBoss.body.width = 50;
       }
-      if(anim.key === 'bossAttackLeft' && frame.index === 4) {
+      if(anim.key === 'bossAttackLeft' && frame.index === 10) {
         console.log("attack disabling on frame 4");
         scene.physics.world.disable(this.attackZoneBoss);
         this.attackZoneBoss.x = this.x;
         this.attackZoneBoss.y = this.y;
         this.anims.play('bossIdle', true);
       }
-      if(anim.key === 'bossAttackRight' && frame.index === 3) {
+      if(anim.key === 'bossAttackRight' && frame.index === 2) {
         console.log("attack right enabled on frame 3");
         scene.physics.world.enable(this.attackZoneBoss);
-        this.attackZoneBoss.x = this.x + 50;
-        this.attackZoneBoss.y = this.y + 30;
+        this.attackZoneBoss.x = this.x + 200;
+        this.attackZoneBoss.y = this.y + 200;
         this.attackZoneBoss.body.height = 50;
+        this.attackZoneBoss.body.width = 50;
       }
-      if(anim.key === 'bossAttackRight' && frame.index === 4) {
+      if(anim.key === 'bossAttackRight' && frame.index === 10) {
         console.log("attack right disabling on frame 4");
         scene.physics.world.disable(this.attackZoneBoss);
         this.attackZoneBoss.x = this.x;
         this.attackZoneBoss.y = this.y;
         this.anims.play('bossIdle', true);
       }
+    });
+  }
+
+  killBoss(scene) {
+    // scene.tweens.killTweensOf(this);
+    this.anims.stop(); // Stop the animation
+    this.destroy(); // Destroy the enemy
+  }
+
+  killPlayer(player, scene) {
+    console.log(this.player);
+    // this.tweens.killTweensOf(this.player);
+    this.player.anims.stop(); // Stop the animation
+    this.player.destroy(); // Destroy the enemy
+
+    this.scene.gameOver = true;
+    this.scene.gameOverText.visible = true;
+    this.scene.input.on('pointerdown', () => {
+      this.scene.start('preload');
+      this.scene.gameOver = false;
     });
   }
 
@@ -76,6 +103,10 @@ export default class Boss extends Phaser.Physics.Arcade.Sprite {
 
     preUpdate(time, delta) {
         super.preUpdate(time, delta);
+
+
+        this.scene.physics.add.overlap(this.attackZoneBoss, this.player, this.killPlayer, null, this);
+
         // console.log("hello");
         // Update logic specific to Enemy1
     //     console.log("sheet 2");
