@@ -83,10 +83,6 @@ export default class Boss extends Phaser.Physics.Arcade.Sprite {
 
     this.scene.gameOver = true;
     this.scene.gameOverText.visible = true;
-    this.scene.input.on('pointerdown', () => {
-      this.scene.start('preload');
-      this.scene.gameOver = false;
-    });
   }
 
 

@@ -207,7 +207,7 @@ class GameScene extends Scene {
       this.physics.add.collider(this.enemy2, backgroundH);
       this.physics.add.collider(this.enemy2, backgroundI);
 
-      this.createBoss(400, 300, backgroundG, backgroundD, backgroundH, backgroundI);
+      this.createBoss(1750, 300, backgroundG, backgroundD, backgroundH, backgroundI);
 
       this.createAnimationUpdate();
 
@@ -457,7 +457,7 @@ class GameScene extends Scene {
 
     createAnimationUpdate2() {
       this.enemy2.on('animationupdate', (anim, frame, sprite, frameKey) => {
-        if(anim.key === 'attack3Left' && frame.index === 1) {
+        if(anim.key === 'attack3Left' && frame.index === 2) {
           console.log("attack enemy2 enabled on frame 3");
           this.physics.world.enable(this.attackZone2);
           this.attackZone2.x = this.enemy2.x - 50;
@@ -737,10 +737,6 @@ class GameScene extends Scene {
 
       this.gameOver = true;
       this.gameOverText.visible = true;
-      this.input.on('pointerdown', () => {
-        this.scene.start('preload');
-        this.gameOver = false;
-      });
     }
 
     collectShard(player, star) {
@@ -772,6 +768,13 @@ class GameScene extends Scene {
       // }
 
       this.shard.anims.play('shardAnimIdle', true);
+
+      if (this.gameOver == true) {
+        this.input.on('pointerdown', () => {
+          this.scene.start('preload');
+          this.gameOver = false;
+        });
+      }
 
       if (this.gameOver !== true) {
         if (this.cursors.right.isDown && this.cursors.space.isDown) {
