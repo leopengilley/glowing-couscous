@@ -2,6 +2,8 @@
 
 Find, break and collect the shard on the map to win the game!
 
+https://leopengilley.github.io/glowing-couscous/
+
 ## How to Play
 | Command | Action |
 |---------|-------------|
